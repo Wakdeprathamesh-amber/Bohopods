@@ -1,0 +1,15 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# One-click deploy: Render dashboard → New → Blueprint → pick this repo.
+services:
+  - type: web
+    name: bohopods
+    runtime: node
+    plan: free            # bump to "starter" to avoid free-tier cold starts
+    region: singapore     # closest Render region to India; also: oregon, frankfurt
+    branch: main
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20.18.0"

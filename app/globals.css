@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+/* ============================================================
+   BOHO PODS — Design System (Scandinavian-organic)
+   Palette, type & motion tokens (Tailwind v4 @theme)
+   ============================================================ */
+@theme {
+  /* Palette */
+  --color-paper: #faf8f1; /* warm white — page bg */
+  --color-cream: #efe9da; /* section bg */
+  --color-sand: #e4dcc8; /* deeper bg / hairlines */
+  --color-sage: #bcc59e; /* light green */
+  --color-olive: #8a9a66; /* brand mid green */
+  --color-olive-deep: #6d7c50; /* hover */
+  --color-forest: #36441f; /* deep brand green */
+  --color-forest-deep: #212c13; /* darkest */
+  --color-bronze: #9c7a3c; /* gold accent */
+  --color-timber: #b88a57; /* wood accent */
+  --color-ink: #2a2a22; /* body text */
+  --color-muted: #5b5c4d; /* muted text — darkened for WCAG AA on cream (~5.6:1) */
+
+  /* Fonts (CSS vars injected by next/font in layout.tsx) */
+  --font-display: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Fluid type */
+  --text-hero: clamp(2.75rem, 1.4rem + 6vw, 7rem);
+  --text-hero--line-height: 0.95;
+  --text-display: clamp(2rem, 1.2rem + 3.6vw, 4.25rem);
+  --text-display--line-height: 1.03;
+
+  /* Motion */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ===== Base ===== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    color: var(--color-forest);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--color-olive);
+    color: var(--color-paper);
+  }
+  section {
+    scroll-margin-top: 5rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+/* ===== Helpers ===== */
+.kicker {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.font-serif-i {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* ===== Animations (CSS — no-JS friendly, paint immediately) ===== */
+@keyframes kb-rise {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes kb-kenburns {
+  from { transform: scale(1.03); }
+  to { transform: scale(1.14); }
+}
+@keyframes kb-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+.animate-rise { animation: kb-rise 0.85s var(--ease-smooth) both; }
+.animate-rise-2 { animation: kb-rise 0.85s var(--ease-smooth) 0.14s both; }
+.animate-kenburns { animation: kb-kenburns 22s ease-in-out infinite alternate; }
+.animate-bob { animation: kb-bob 2.2s ease-in-out infinite; }
+
+/* No-JS fallback: reveal-animated content must never be invisible without scripting */
+@media (scripting: none) {
+  .js-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Accessible keyboard focus ring (WCAG 2.4.7) */
+:where(a, button, summary, [role="button"], [tabindex]):focus-visible {
+  outline: 2px solid var(--color-olive);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Hero text legibility over bright imagery */
+.hero-text-shadow {
+  text-shadow: 0 1px 28px rgba(0, 0, 0, 0.38);
+}
+
+/* ===== 3D brochure teaser book ===== */
+.book-scene {
+  perspective: 1800px;
+}
+.book {
+  position: relative;
+  aspect-ratio: 1075 / 758;
+  transform: rotateX(6deg) rotateY(-18deg);
+  transform-style: preserve-3d;
+  transition: transform 0.9s var(--ease-smooth);
+}
+.book::after {
+  content: "";
+  position: absolute;
+  inset: auto 6% -7% 6%;
+  height: 12%;
+  background: rgba(0, 0, 0, 0.4);
+  filter: blur(22px);
+  transform: translateZ(-60px);
+  border-radius: 50%;
+}
+.group:hover .book {
+  transform: rotateX(4deg) rotateY(-10deg);
+}
+.book-under,
+.book-cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  backface-visibility: hidden;
+}
+.book-under {
+  filter: brightness(0.92);
+}
+.book-cover {
+  transform-origin: left center;
+  transition: transform 1s var(--ease-smooth);
+  box-shadow: 6px 0 18px rgba(0, 0, 0, 0.25);
+  animation: book-peek 7s ease-in-out 2s infinite;
+}
+.group:hover .book-cover {
+  transform: rotateY(-46deg);
+  animation-play-state: paused;
+}
+@keyframes book-peek {
+  0%, 78%, 100% { transform: rotateY(0deg); }
+  86%, 92% { transform: rotateY(-32deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .book-cover { animation: none; }
+}
+
+/* subtle film grain over the whole site */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
