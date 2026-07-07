@@ -18,9 +18,18 @@ export function BrochureTeaser() {
             the philosophy — laid out in nineteen beautiful pages. Go on, turn
             one.
           </p>
-          <CTA href="/brochure" variant="light" className="mt-8">
-            Flip through it <ArrowUpRight className="size-4" />
-          </CTA>
+          <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+            <CTA href="/brochure" variant="light">
+              Flip through it <ArrowUpRight className="size-4" />
+            </CTA>
+            <a
+              href="/brochure/bohopods-brochure.pdf"
+              download="Bohopods-Brochure.pdf"
+              className="font-display text-sm text-paper/60 underline decoration-paper/30 underline-offset-4 transition-colors hover:text-paper"
+            >
+              or download the PDF (4 MB)
+            </a>
+          </div>
         </Reveal>
 
         <Reveal delay={0.1}>

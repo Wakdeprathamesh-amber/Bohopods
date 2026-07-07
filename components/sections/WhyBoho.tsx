@@ -69,7 +69,7 @@ export function WhyBoho() {
         <Reveal delay={0.1}>
           <div className="mt-20 border-t border-sand pt-10">
             <p className="text-center font-serif-i text-2xl text-olive-deep sm:text-3xl">
-              Designed in Mumbai. Made to last, made to love.
+              Designed in Mumbai. Made to last.
             </p>
             <div className="mx-auto mt-9 grid max-w-4xl gap-8 sm:grid-cols-3">
               {craft.map((c) => (

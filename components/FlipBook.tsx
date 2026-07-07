@@ -9,7 +9,7 @@ const Inner = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="mx-auto w-full max-w-4xl">
+      <div className="mx-auto w-full">
         <div className="overflow-hidden rounded-2xl border border-sand shadow-xl shadow-forest/10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

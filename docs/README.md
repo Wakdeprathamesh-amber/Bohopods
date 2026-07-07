@@ -23,6 +23,7 @@
 | 12 | [Design Director's Cut](12-design-directors-cut.md) | Fresh-eyes pass on the current build — enhance / add / subtract |
 | 13 | [Asset Generation Prompts](13-asset-generation-prompts.md) | Ready-to-run Higgsfield/Runway prompts for lifestyle stills + hero video |
 | 14 | [Gatsby Hero Film Treatment](14-gatsby-hero-film-treatment.md) | ⭐ "FIRST LIGHT" — full director's treatment: storyboard, prompts, edit/grade/loop bible |
+| 15 | [Mobile Experience Plan](15-mobile-experience-plan.md) | Mobile-first use cases, per-template audit, shipped fixes & test matrix |
 
 ## 🗂️ Repo layout
 ```

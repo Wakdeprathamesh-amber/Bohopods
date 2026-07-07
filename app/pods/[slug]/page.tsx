@@ -102,8 +102,8 @@ export default async function PodPage({
       )}
       <Nav />
       <main>
-        {/* ── Hero ── */}
-        <section className="relative flex min-h-[78vh] w-full items-end overflow-hidden">
+        {/* ── Hero — image-first, minimal overlay (name + one CTA) ── */}
+        <section className="relative flex min-h-[72vh] w-full items-end overflow-hidden">
           <Image
             src={pod.image}
             alt={`The ${pod.name} pod`}
@@ -112,68 +112,65 @@ export default async function PodPage({
             sizes="100vw"
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/85 via-forest-deep/25 to-forest-deep/45" />
-          <Container className="relative z-10 pb-14 pt-28">
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-transparent to-forest-deep/30" />
+          <Container className="relative z-10 pb-12 pt-28">
             <Link
               href="/pods"
               className="inline-flex items-center gap-1.5 text-sm text-paper/80 transition-colors hover:text-paper"
             >
               <ArrowLeft className="size-4" /> All pods
             </Link>
-            <div className="hero-text-shadow mt-5 max-w-3xl">
+            <div className="hero-text-shadow mt-5">
               {pod.flagship && (
                 <span className="mb-3 block w-fit rounded-full bg-bronze/90 px-3 py-1 text-xs font-display uppercase tracking-wider text-paper">
                   Flagship
                 </span>
               )}
-              <Eyebrow className="text-paper/85">{pod.tagline}</Eyebrow>
-              <h1 className="mt-3 text-hero font-light text-paper">{pod.name}</h1>
-              <p className="mt-4 max-w-xl font-serif-i text-2xl text-sage">
+              <h1 className="text-hero font-light text-paper">{pod.name}</h1>
+              <div className="mt-7">
+                <CTA href={waLink(waMsg.pod(pod.name))} external variant="light">
+                  <MessageCircle className="size-4" /> Enquire on WhatsApp
+                </CTA>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        {/* ── Intro (text lives below the image now) ── */}
+        <Section>
+          <Container className="max-w-3xl">
+            <Reveal>
+              <Eyebrow>{pod.tagline}</Eyebrow>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <p className="mt-3 font-serif-i text-2xl text-forest md:text-3xl">
                 {pod.heroLine}
               </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="mt-6 text-lg font-light leading-relaxed text-ink text-balance">
+                {pod.overview}
+              </p>
+            </Reveal>
+            <Reveal delay={0.12}>
               <div className="mt-6 flex flex-wrap items-center gap-2.5">
                 {pod.specs.slice(0, 3).map((s) => (
                   <span
                     key={s.label}
-                    className="rounded-full border border-paper/30 px-3 py-1 text-xs text-paper/85"
+                    className="rounded-full border border-sand bg-cream px-3 py-1 text-xs text-ink"
                   >
                     {s.label}: {s.value}
                   </span>
                 ))}
                 {pod.priceFrom && (
-                  <span className="rounded-full bg-paper px-3 py-1 text-xs font-display text-forest">
+                  <span className="rounded-full bg-forest px-3 py-1 text-xs font-display text-paper">
                     from {pod.priceFrom}
                   </span>
                 )}
               </div>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <CTA href={waLink(waMsg.pod(pod.name))} external variant="light">
-                  <MessageCircle className="size-4" /> Enquire on WhatsApp
-                </CTA>
-                <CTA href={waLink(waMsg.siteVisit)} external variant="outlineLight">
-                  Book a site visit
-                </CTA>
-              </div>
-              <p className="mt-5 text-sm text-paper/75">
-                Free site visit · No obligation · Just a friendly WhatsApp chat
-              </p>
-            </div>
-          </Container>
-        </section>
-
-        {/* ── Overview ── */}
-        <Section>
-          <Container className="max-w-3xl">
-            <Reveal>
-              <Eyebrow>Overview</Eyebrow>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <p className="mt-5 text-xl font-light leading-relaxed text-ink text-balance">
-                {pod.overview}
-              </p>
             </Reveal>
             {pod.imagePlaceholder && (
-              <Reveal delay={0.1}>
+              <Reveal delay={0.14}>
                 <p className="mt-4 text-xs text-muted">
                   (Imagery shown is indicative — real {pod.name} photos to follow.)
                 </p>

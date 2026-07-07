@@ -150,12 +150,12 @@ export const stats = [
 ] as const;
 
 export const testimonials = [
-  { name: "Ravi Chabbra", quote: "Absolutely love the open, airy design — and the build quality is top-notch." },
-  { name: "Prasad Gadgil", quote: "The craftsmanship is incredible. It's perfect for work or relaxation." },
-  { name: "Ritika Keswani", quote: "Sleek, modern, and built to last. Exactly what we hoped for." },
-  { name: "Amar A.", quote: "Stunning pod, and the service was friendly and timely throughout." },
-  { name: "Gaurang", quote: "The perfect mix of style and practicality." },
-  { name: "Arushi Agarwal", quote: "Beautifully made, with a great sense of space." },
+  { name: "Ravi Chabbra", image: "/images/reviews/ravi.jpg", quote: "Absolutely love the open, airy design — it feels so much larger than it looks! The build quality is top-notch." },
+  { name: "Prasad Gadgil", image: "/images/reviews/prasad.jpg", quote: "The craftsmanship is incredible. Every detail feels premium, and the open layout makes it perfect for work or relaxation." },
+  { name: "Ritika Keswani", image: "/images/reviews/ritika.jpg", quote: "Super impressed with the design and finish — sleek, modern, and built to last. Quality was clearly prioritized." },
+  { name: "Amar A.", image: "/images/reviews/amar.jpg", quote: "Our prefab pod looks stunning! The open design lets in so much light, and the materials feel solid and durable." },
+  { name: "Gaurang", image: "/images/reviews/gaurang.jpg", quote: "It's the perfect mix of style and practicality. The pod feels spacious, and quality exceeded expectations." },
+  { name: "Arushi Agarwal", image: "/images/reviews/arushi.jpg", quote: "From the first look, you can tell it's beautifully made. The open plan gives a great sense of space." },
 ] as const;
 
 export const faqs = [

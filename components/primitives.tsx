@@ -55,18 +55,22 @@ export function CTA({
   children,
   variant = "primary",
   external,
+  download,
   className,
 }: {
   href: string;
   children: React.ReactNode;
   variant?: CTAVariant;
   external?: boolean;
+  /** Download the target instead of navigating (optionally set the filename). */
+  download?: boolean | string;
   className?: string;
 }) {
   return (
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      {...(download ? { download: download === true ? "" : download } : {})}
       className={cn(
         "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium font-display tracking-wide transition-all duration-300 will-change-transform hover:-translate-y-px active:translate-y-0",
         VARIANTS[variant],

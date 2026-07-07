@@ -91,8 +91,9 @@ export function GatsbyHeroSlideshow() {
         ))}
 
       {/* Slide dots (hidden in video mode) */}
+      {/* Dots sit bottom-left on mobile so they don't collide with the WhatsApp float */}
       {!videoMode && (
-        <div className="absolute bottom-8 right-6 z-20 flex items-center gap-2 sm:right-10">
+        <div className="absolute bottom-8 left-5 z-20 flex items-center gap-2 sm:left-auto sm:right-10">
           {SLIDES.map((s, i) => (
             <button
               key={s.src}

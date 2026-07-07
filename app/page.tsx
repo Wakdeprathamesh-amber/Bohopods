@@ -4,7 +4,6 @@ import { TrustBar } from "@/components/sections/TrustBar";
 import { WhyBoho } from "@/components/sections/WhyBoho";
 import { Process } from "@/components/sections/Process";
 import { Pods } from "@/components/sections/Pods";
-import { GatsbySpotlight } from "@/components/sections/GatsbySpotlight";
 import { Addons } from "@/components/sections/Addons";
 import { Comparison } from "@/components/sections/Comparison";
 import { Advantage } from "@/components/sections/Advantage";
@@ -30,7 +29,6 @@ export default function Home() {
         <WhyBoho />
         <Process />
         <Pods />
-        <GatsbySpotlight />
         <Addons />
         <Comparison />
         <Advantage />

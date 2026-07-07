@@ -1,25 +1,10 @@
 import { Container, Section, Eyebrow } from "../primitives";
 import { Reveal } from "../Reveal";
-import { Topo } from "../decor/Topo";
-
-// Stylised (not geographically exact) placement to evoke the getaway belts.
-const pins = [
-  { name: "Igatpuri", x: 42, y: 16 },
-  { name: "Nashik", x: 58, y: 11 },
-  { name: "Alibaug", x: 15, y: 41 },
-  { name: "Karjat", x: 33, y: 33 },
-  { name: "Lonavala", x: 45, y: 42 },
-  { name: "Khandala", x: 53, y: 37 },
-  { name: "Mahabaleshwar", x: 38, y: 58 },
-  { name: "Panchgani", x: 50, y: 61 },
-  { name: "Goa", x: 27, y: 78 },
-  { name: "Coorg", x: 46, y: 90 },
-  { name: "Kodaikanal", x: 63, y: 91 },
-];
+import { IndiaWestMap } from "../decor/IndiaWestMap";
 
 export function Locations() {
   return (
-    <Section id="locations" className="bg-forest text-paper">
+    <Section id="locations" className="bg-forest text-paper md:py-24">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
@@ -32,30 +17,29 @@ export function Locations() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 text-paper/70">
-              From the Western Ghats to the Konkan coast — within a 2–6 hour drive
-              of Mumbai &amp; Pune.
+              Down India&rsquo;s west coast — from the Western Ghats to the
+              Konkan shore, most within a 2–6 hour drive of Mumbai &amp; Pune.
             </p>
           </Reveal>
         </div>
 
         <Reveal delay={0.15}>
-          <div className="relative mx-auto mt-12 aspect-[16/11] max-w-4xl overflow-hidden rounded-3xl border border-paper/15 bg-forest-deep/40 sm:aspect-[16/9]">
-            <Topo className="pointer-events-none absolute inset-0 h-full w-full text-sage/15" />
-            {pins.map((p) => (
-              <div
-                key={p.name}
-                className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ left: `${p.x}%`, top: `${p.y}%` }}
-              >
-                <span className="flex items-center gap-1.5">
-                  <span className="size-2 shrink-0 rounded-full bg-sage ring-4 ring-sage/20" />
-                  <span className="whitespace-nowrap text-[0.7rem] text-paper/85 sm:text-sm">
-                    {p.name}
-                  </span>
-                </span>
-              </div>
-            ))}
+          {/* Mobile: map keeps a legible width and pans sideways */}
+          <div className="relative mx-auto mt-8 max-w-3xl overflow-x-auto rounded-3xl border border-paper/15 bg-forest-deep/40">
+            <IndiaWestMap className="h-auto w-full min-w-[620px] sm:min-w-0" />
           </div>
+          <p className="mt-3 text-center text-xs text-paper/50 sm:hidden">
+            ← Drag the map to explore →
+          </p>
+          <p className="mx-auto mt-4 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-1 text-center text-xs text-paper/50">
+            <span className="inline-flex items-center gap-2">
+              <span className="size-2 rounded-full bg-bronze" /> Boho destinations
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="size-2 border border-paper/60" /> Reference cities
+            </span>
+            <span>Stylised topography — not to scale</span>
+          </p>
         </Reveal>
       </Container>
     </Section>

@@ -1,17 +1,15 @@
+import Image from "next/image";
 import { Star } from "lucide-react";
 import { Container, Section, Eyebrow } from "../primitives";
 import { Reveal } from "../Reveal";
 import { testimonials } from "@/lib/site";
-import { cn } from "@/lib/utils";
 
-/** Editorial pull-quotes — three strong voices, typographically celebrated. */
+/** Owner reviews — avatar, five stars, quote. */
 export function Testimonials() {
-  const picks = [testimonials[0], testimonials[1], testimonials[5]];
-
   return (
     <Section className="bg-cream">
-      <Container className="max-w-4xl">
-        <div className="text-center">
+      <Container>
+        <div className="mx-auto max-w-2xl text-center">
           <Reveal>
             <Eyebrow>Loved by owners</Eyebrow>
           </Reveal>
@@ -22,31 +20,32 @@ export function Testimonials() {
           </Reveal>
         </div>
 
-        <div className="mt-16 space-y-16">
-          {picks.map((t, i) => (
-            <Reveal key={t.name} delay={0.05}>
-              <figure
-                className={cn(
-                  "max-w-2xl",
-                  i % 2 === 1 ? "ml-auto text-right" : "text-left",
-                )}
-              >
-                <div
-                  className={cn(
-                    "flex gap-1 text-bronze",
-                    i % 2 === 1 && "justify-end",
-                  )}
-                >
-                  {Array.from({ length: 5 }).map((_, k) => (
-                    <Star key={k} className="size-3.5 fill-current" />
-                  ))}
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {testimonials.map((t, i) => (
+            <Reveal key={t.name} delay={(i % 3) * 0.06} className="h-full">
+              <figure className="flex h-full flex-col rounded-2xl border border-sand bg-paper p-6">
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={t.image}
+                    alt={t.name}
+                    width={48}
+                    height={48}
+                    className="size-12 shrink-0 rounded-full object-cover"
+                  />
+                  <div>
+                    <figcaption className="font-display text-forest">
+                      {t.name}
+                    </figcaption>
+                    <div className="mt-0.5 flex gap-0.5 text-bronze">
+                      {Array.from({ length: 5 }).map((_, k) => (
+                        <Star key={k} className="size-3 fill-current" />
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <blockquote className="mt-4 font-serif-i text-2xl leading-snug text-forest sm:text-3xl md:text-[2.4rem] md:leading-[1.25]">
+                <blockquote className="mt-4 leading-relaxed text-muted">
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
-                <figcaption className="kicker mt-5 text-muted">
-                  — {t.name}
-                </figcaption>
               </figure>
             </Reveal>
           ))}

@@ -50,7 +50,12 @@ export function Process() {
         <Reveal delay={0.1}>
           <div className="mt-16 rounded-3xl border border-paper/15 p-6 md:p-10">
             <p className="kicker text-sage">The 5-week timeline</p>
-            <ol className="relative mt-9 grid gap-9 sm:grid-cols-2 lg:grid-cols-5">
+            {/* Mobile: vertical timeline rows · Desktop: 5 nodes on a line */}
+            <ol className="relative mt-8 flex flex-col gap-7 lg:mt-9 lg:grid lg:grid-cols-5 lg:gap-9">
+              <span
+                className="pointer-events-none absolute bottom-6 left-6 top-6 w-px -translate-x-1/2 bg-paper/15 lg:hidden"
+                aria-hidden="true"
+              />
               <span
                 className="pointer-events-none absolute inset-x-6 top-6 hidden h-px bg-paper/15 lg:block"
                 aria-hidden="true"
@@ -60,15 +65,17 @@ export function Process() {
                 return (
                   <li
                     key={t.label}
-                    className="relative flex flex-col items-center text-center lg:items-start lg:text-left"
+                    className="relative flex items-center gap-4 lg:flex-col lg:items-start lg:gap-0"
                   >
-                    <span className="relative z-10 inline-flex size-12 items-center justify-center rounded-full border border-sage/40 bg-forest text-sage">
+                    <span className="relative z-10 inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-sage/40 bg-forest text-sage">
                       <Icon className="size-5" />
                     </span>
-                    <div className="mt-4 font-display text-sm text-sage">
-                      Week {i + 1}
+                    <div className="lg:mt-4">
+                      <div className="font-display text-sm text-sage">
+                        Week {i + 1}
+                      </div>
+                      <div className="mt-0.5 text-paper/90 lg:mt-1">{t.label}</div>
                     </div>
-                    <div className="mt-1 text-paper/90">{t.label}</div>
                   </li>
                 );
               })}

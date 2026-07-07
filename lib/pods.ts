@@ -17,6 +17,8 @@ export type Pod = {
   overview: string;
   image: string;
   imagePlaceholder?: boolean; // true = needs a real photo of this pod
+  /** At-a-glance facts for catalogue cards: [area, sleeps, signature]. */
+  glance: [string, string, string];
   gallery: string[];
   priceFrom?: string; // e.g. "₹20L" — omit to hide price
   priceNote?: string;
@@ -45,6 +47,7 @@ export const pods: Pod[] = [
     overview:
       "Our flagship — the Lux version of our pods, with every bell and whistle over the premium build. A spacious living area and bedroom open onto a generous covered sit-out, wrapped in top-of-the-line materials and finished with the kind of details you'd expect from a boutique hotel suite.",
     image: "/images/gatsby/ext-05.jpg",
+    glance: ["650 sq ft built", "Sleeps 2+", "Skylit roof + big deck"],
     gallery: [
       "/images/gatsby/ext-03.jpg",
       "/images/gatsby/ext-07.jpg",
@@ -100,6 +103,7 @@ export const pods: Pod[] = [
     overview:
       "The new standard for work-from-anywhere. A secluded micro-retreat for the modern wanderer and remote professional — tuck it into a garden, perch it by a pool, or open it to a mountain view. Proof that true luxury doesn't need a big footprint, just intelligent design.",
     image: "/images/renders/boho-125.jpg",
+    glance: ["580 sq ft built", "Sleeps 1–2", "12 mm curved glass"],
     gallery: [
       "/images/renders/boho-125.jpg",
       "/images/renders/boho-126.jpg",
@@ -154,6 +158,7 @@ export const pods: Pod[] = [
     overview:
       "Built on a high-quality mild-steel framework with industrial-grade materials that last over 30 years — a no-frills cabin with minimal automation, purpose-built for extreme-weather locations. Spacious volume and wide openings give you panoramic views inside a secure, weather-tight shell.",
     image: "/images/renders/boho-149.jpg",
+    glance: ["270 sq ft room", "Sleeps 2 (grows)", "Extreme-weather build"],
     gallery: [
       "/images/renders/boho-149.jpg",
       "/images/renders/boho-143.jpg",
@@ -201,6 +206,7 @@ export const pods: Pod[] = [
     overview:
       "Built over the robust quad pod, the Gazepod adds a large attached gazebo and an expansive deck — blurring the line between indoor comfort and the great outdoors. For hosts and homeowners who want the view to be the living room.",
     image: "/images/renders/boho-031.jpg",
+    glance: ["280 sq ft room", "Sleeps 2 (grows)", "325 sq ft deck + gazebo"],
     gallery: [
       "/images/renders/boho-031.jpg",
       "/images/renders/boho-145.jpg",
@@ -250,6 +256,7 @@ export const pods: Pod[] = [
       "Our smallest pod — a sound-controlled private space for video calls, meetings and focused work. Designed to boost footfall in cafés and add private rooms to offices and commercial spaces, the Cocoon brings a moment of quiet to busy places.",
     image: "/images/renders/boho-133.jpg",
     imagePlaceholder: true,
+    glance: ["4 × 4 ft footprint", "1 person", "Sound-insulated"],
     gallery: ["/images/renders/boho-133.jpg"],
     priceFrom: "₹5L",
     specs: [
@@ -286,6 +293,7 @@ export const pods: Pod[] = [
       "A modern take on the watchman's cabin — industrial-grade materials engineered for the Indian subcontinent's harshest weather, with the look and feel of an art piece. Function that doesn't compromise on form.",
     image: "/images/renders/boho-143.jpg",
     imagePlaceholder: true,
+    glance: ["5 × 10 ft cabin", "Utility", "Industrial-grade"],
     gallery: ["/images/renders/boho-143.jpg"],
     priceFrom: "₹5L",
     specs: [
@@ -314,6 +322,19 @@ export const pods: Pod[] = [
 
 export const retreatPods = pods.filter((p) => p.family === "retreat");
 export const utilityPods = pods.filter((p) => p.family === "utility");
+
+/**
+ * Family-scale modular homes — priced on the live site but specs/photos are
+ * not yet published, so they surface as enquiry cards (no detail page yet).
+ */
+export const homesTeaser = {
+  name: "The 3-BHK",
+  tagline: "A full family home — prefab",
+  priceFrom: "₹95L",
+  altLine: "2-BHK from ₹65L",
+  image: "/images/renders/boho-013.jpg",
+  blurb: "Our largest modular home. Layouts & specs on request.",
+} as const;
 
 export function getPod(slug: string): Pod | undefined {
   return pods.find((p) => p.slug === slug);

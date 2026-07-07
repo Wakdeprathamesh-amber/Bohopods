@@ -1,45 +1,61 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
 import { Container, Section, Eyebrow } from "../primitives";
 import { Reveal } from "../Reveal";
+import { PodGallery } from "../PodGallery";
+import { retreatPods } from "@/lib/pods";
 
-const shots = [
-  { src: "/images/renders/boho-065.jpg", alt: "Beachfront pod glowing at golden hour" },
-  { src: "/images/renders/boho-031.jpg", alt: "Pod on a deck above a misty valley" },
-  { src: "/images/renders/boho-145.jpg", alt: "Seaside pod with a sunken fire pit" },
-  { src: "/images/renders/boho-126.jpg", alt: "Glass pod wrapped in monsoon mist" },
-  { src: "/images/renders/boho-149.jpg", alt: "Oceanfront pod framed by palms" },
-  { src: "/images/renders/boho-133.jpg", alt: "Warm wood-and-glass pod interior" },
-];
+/** Pods with a real photo set get a tab; single-render pods join once shot. */
+const tabs = retreatPods.filter((p) => p.gallery.length > 1);
 
 export function Gallery() {
+  const [active, setActive] = useState(tabs[0].slug);
+  const pod = tabs.find((p) => p.slug === active) ?? tabs[0];
+
   return (
     <Section className="bg-paper">
       <Container>
-        <div className="max-w-2xl">
-          <Reveal>
-            <Eyebrow>The Gallery</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h2 className="mt-4 text-display font-light">
-              Inside, outside — and the line between.
-            </h2>
-          </Reveal>
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div className="max-w-2xl">
+            <Reveal>
+              <Eyebrow>The Gallery</Eyebrow>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <h2 className="mt-4 text-display font-light">
+                Inside, outside — and the line between.
+              </h2>
+            </Reveal>
+          </div>
         </div>
 
-        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3">
-          {shots.map((s, i) => (
-            <Reveal key={s.src} delay={(i % 3) * 0.05} className="h-full">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-sand">
-                <Image
-                  src={s.src}
-                  alt={s.alt}
-                  fill
-                  sizes="(max-width:768px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-[1400ms] ease-out hover:scale-105"
-                />
-              </div>
-            </Reveal>
-          ))}
+        <Reveal delay={0.1}>
+          <div
+            role="tablist"
+            aria-label="Browse gallery by pod"
+            className="mt-8 flex flex-wrap gap-2.5"
+          >
+            {tabs.map((p) => (
+              <button
+                key={p.slug}
+                role="tab"
+                aria-selected={p.slug === active}
+                onClick={() => setActive(p.slug)}
+                className={
+                  p.slug === active
+                    ? "rounded-full border border-forest bg-forest px-5 py-2 font-display text-sm text-paper transition-colors"
+                    : "rounded-full border border-sand bg-paper px-5 py-2 font-display text-sm text-ink transition-colors hover:border-olive"
+                }
+              >
+                {p.name}
+              </button>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* Remount on tab change so the grid rises in fresh */}
+        <div key={pod.slug} className="animate-rise">
+          <PodGallery podName={pod.name} images={pod.gallery} />
         </div>
       </Container>
     </Section>
