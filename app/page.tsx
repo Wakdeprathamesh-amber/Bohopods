@@ -25,14 +25,14 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <TrustBar />
+        <Advantage />
         <WhyBoho />
         <Process />
         <Pods />
         <Addons />
         <Comparison />
-        <Advantage />
         <ImageBreak />
+        <TrustBar />
         <Ownership />
         <Experiences />
         <Locations />

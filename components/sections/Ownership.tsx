@@ -33,7 +33,7 @@ export function Ownership() {
               Make your land pay for itself.
             </h2>
             <p className="mt-5 max-w-lg leading-relaxed text-muted">
-              With as little as ~2,000 sq ft, a Boho Pod turns idle land into a
+              With as little as ~2,000 sq ft, a Bohopod turns idle land into a
               high-yield rental — listed on Airbnb, StayVista and Booking.com — that
               covers upkeep and earns. Choose the path that suits you:
             </p>

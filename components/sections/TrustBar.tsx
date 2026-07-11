@@ -19,7 +19,7 @@ export function TrustBar() {
       <Topo className="pointer-events-none absolute inset-0 h-full w-full text-olive/15" />
       <Container className="relative flex flex-col items-center gap-6 py-12 text-center md:py-14">
         <p className="max-w-3xl font-display text-xl font-light text-forest md:text-3xl">
-          Your pod earns on the platforms guests{" "}
+          Your Bohopod earns on the platforms guests{" "}
           <span className="font-serif-i text-bronze">already trust.</span>
         </p>
         <div className="flex flex-wrap items-baseline justify-center gap-x-6 gap-y-3 sm:gap-x-10 sm:gap-y-4">

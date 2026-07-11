@@ -33,7 +33,7 @@ export function Locations() {
           </p>
           <p className="mx-auto mt-4 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-1 text-center text-xs text-paper/50">
             <span className="inline-flex items-center gap-2">
-              <span className="size-2 rounded-full bg-bronze" /> Boho destinations
+              <span className="size-2 rounded-full bg-bronze" /> Bohopods destinations
             </span>
             <span className="inline-flex items-center gap-2">
               <span className="size-2 border border-paper/60" /> Reference cities

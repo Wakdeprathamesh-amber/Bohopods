@@ -9,7 +9,7 @@ export function FinalCta() {
     <section className="relative overflow-hidden">
       <Image
         src="/images/renders/boho-145.jpg"
-        alt="A Boho Pod at golden hour beside the sea"
+        alt="A Bohopod at golden hour beside the sea"
         fill
         sizes="100vw"
         className="object-cover"
@@ -22,7 +22,7 @@ export function FinalCta() {
             Skip the wait. Start your legacy.
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-paper/80">
-            Tell us about your land and we&rsquo;ll help you picture the pod on it —
+            Tell us about your land and we&rsquo;ll help you picture the Bohopod on it —
             no pressure, just a friendly chat on WhatsApp.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-4">

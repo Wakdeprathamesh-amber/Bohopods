@@ -43,8 +43,8 @@ export function Addons() {
           <Eyebrow>Add-ons</Eyebrow>
           <h2 className="mt-4 text-display font-light">Make it yours.</h2>
           <p className="mt-4 max-w-md leading-relaxed text-muted">
-            Every pod is a canvas — dress yours up for the way you&rsquo;ll live
-            in it.
+            Every Bohopod is a canvas — dress yours up for the way you&rsquo;ll
+            live in it.
           </p>
           <p className="mt-6 max-w-md border-l-2 border-olive pl-5 font-serif-i text-lg leading-snug text-forest md:text-2xl">
             You don&rsquo;t have to buy everything at once — start with one pod,

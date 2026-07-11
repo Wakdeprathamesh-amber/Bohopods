@@ -85,7 +85,7 @@ export default function PodsPage() {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mx-auto mt-5 max-w-xl text-muted">
-                Every pod is factory-built, plug-and-play on your plot, and
+                Every Bohopod is factory-built, plug-and-play on your plot, and
                 engineered for 30+ years of Indian weather.
               </p>
             </Reveal>

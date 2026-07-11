@@ -43,7 +43,7 @@ export function Comparison() {
         <div className="mt-12 grid gap-5 md:grid-cols-2">
           <Reveal className="h-full">
             <div className="h-full rounded-3xl bg-forest p-8 text-paper shadow-xl shadow-forest/10">
-              <h3 className="text-2xl text-paper">A Boho Pod</h3>
+              <h3 className="text-2xl text-paper">A Bohopod</h3>
               <ul className="mt-6 space-y-3.5">
                 {boho.map((b) => (
                   <li key={b} className="flex items-start gap-3">

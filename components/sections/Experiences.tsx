@@ -12,7 +12,8 @@ export function Experiences() {
             <div>
               <p className="kicker text-olive">Try before you own</p>
               <p className="mt-2 max-w-md font-serif-i text-2xl leading-snug text-forest">
-                Spend a night in one first — then decide with your whole heart.
+                Spend a night in a Bohopod first — then decide with your whole
+                heart.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
@@ -26,7 +27,7 @@ export function Experiences() {
               ))}
               <CTA
                 href={waLink(
-                  "Hi Boho Pods! I'd like to book a stay to experience a pod before buying.",
+                  "Hi Boho Pods! I'd like to book a stay to experience a Bohopod before buying.",
                 )}
                 external
                 variant="primary"

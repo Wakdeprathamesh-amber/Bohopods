@@ -34,7 +34,7 @@ export const waMsg = {
 };
 
 export const nav = [
-  { label: "Why Boho", href: "/#why" },
+  { label: "Why Bohopods", href: "/#why" },
   { label: "The Pods", href: "/pods" },
   { label: "Ownership", href: "/#ownership" },
   { label: "Process", href: "/#process" },
@@ -130,8 +130,8 @@ export const advantages = [
 ] as const;
 
 export const steps = [
-  { k: "Select", title: "Select", body: "Meet us, choose your pod and confirm your plot. Booking starts the journey." },
-  { k: "Install", title: "Install", body: "We survey, prep the site and build your prefab cabin — typically 30–45 days." },
+  { k: "Select", title: "Select", body: "Meet us, choose your Bohopod and confirm your plot. Booking starts the journey." },
+  { k: "Install", title: "Install", body: "We survey, prep the site and build your Bohopod — typically 30–45 days." },
   { k: "Stay", title: "Stay", body: "Handover day. Step in, breathe out, and start making memories." },
 ] as const;
 
@@ -159,13 +159,13 @@ export const testimonials = [
 ] as const;
 
 export const faqs = [
-  { q: "Are prefab pods actually durable?", a: "Yes. Boho Pods are built from industrial-grade materials engineered for a 30+ year lifespan and Indian weather extremes — from coastal humidity to ghat monsoons." },
-  { q: "Do I need municipal permissions?", a: "Generally no. Pods are classified as temporary structures (they don't count toward FSI) and can sit in CRZ-1 zones with only nominal permissions." },
+  { q: "Are Bohopods actually durable?", a: "Yes. Every Bohopod is built from industrial-grade materials engineered for a 30+ year lifespan and Indian weather extremes — from coastal humidity to ghat monsoons." },
+  { q: "Do I need municipal permissions?", a: "Generally no. Bohopods are classified as temporary structures (they don't count toward FSI) and can sit in CRZ-1 zones with only nominal permissions." },
   { q: "How do I pay — can I finance it?", a: "Choose what suits you: outright (20:20:20:20), EMI from ₹5L down, a lease program, or a revenue-share model." },
   { q: "How long does installation take?", a: "Most of the build happens in our factory. On-site it's plug-and-play — typically a 30–45 day timeline from booking to handover." },
   { q: "Will it work on my plot?", a: "Most likely. We run a free site survey to confirm access and placement. Around 1,000–2,000 sq ft is enough to also earn rental income." },
   { q: "Can it earn me money?", a: "Yes — many owners list on Airbnb, StayVista and Booking.com and see ROI within 1–2 years, with 50:50 or 70:30 revenue-share options available." },
-  { q: "What happens after handover?", a: "Our AMC program keeps your pod in top shape with ongoing maintenance and after-sales support." },
+  { q: "What happens after handover?", a: "Our AMC program keeps your Bohopod in top shape with ongoing maintenance and after-sales support." },
 ] as const;
 
 export const locations = [
