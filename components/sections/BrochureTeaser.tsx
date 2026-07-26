@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Container, Section, Eyebrow, CTA } from "../primitives";
 import { Reveal } from "../Reveal";
+import { cldUrl } from "@/lib/cloudinary";
 
 /** Homepage teaser: a 3D book that peeks open — full flip-book lives at /brochure. */
 export function BrochureTeaser() {
@@ -41,7 +42,7 @@ export function BrochureTeaser() {
             <div className="book">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/brochure/page-02.jpg"
+                src={cldUrl("/brochure/page-02.jpg", { w: 900 })}
                 alt=""
                 width={1075}
                 height={758}
@@ -51,7 +52,7 @@ export function BrochureTeaser() {
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/brochure/page-01.jpg"
+                src={cldUrl("/brochure/page-01.jpg", { w: 900 })}
                 alt="Boho Pods brochure cover"
                 width={1075}
                 height={758}

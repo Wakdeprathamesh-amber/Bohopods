@@ -15,6 +15,7 @@ import {
   ZoomOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { cldUrl } from "@/lib/cloudinary";
 
 type FlipEvent = { data: number };
 
@@ -203,7 +204,7 @@ export function FlipBookInner({
                   <div key={src} className="bg-cream">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={src}
+                      src={cldUrl(src, { w: 1400 })}
                       alt={`Bohopods brochure — page ${i + 1} of ${pages.length}`}
                       width={1075}
                       height={758}
@@ -256,7 +257,7 @@ export function FlipBookInner({
                 )}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={src} alt="" className="h-full w-auto" loading="lazy" draggable={false} />
+                <img src={cldUrl(src, { w: 200 })} alt="" className="h-full w-auto" loading="lazy" draggable={false} />
                 <span className="absolute bottom-0 right-0 rounded-tl bg-forest-deep/80 px-1 text-[9px] text-paper/90">
                   {i + 1}
                 </span>
