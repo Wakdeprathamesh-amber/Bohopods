@@ -46,11 +46,16 @@ export function Nav() {
         ? pathname.startsWith("/pods")
         : pathname.startsWith(href);
 
+  // Pages whose top of page is a light background (no dark hero behind the nav):
+  // the bar must start in its solid, dark-text state so the logo/links stay legible.
+  const lightTop = pathname === "/pods" || pathname === "/brochure";
+  const solid = scrolled || lightTop;
+
   return (
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        scrolled
+        solid
           ? "bg-paper/85 backdrop-blur-md border-b border-sand/60 py-3"
           : "py-5",
       )}
@@ -58,7 +63,7 @@ export function Nav() {
       <Container className="flex items-center justify-between">
         <a
           href="/"
-          className={cn("transition-colors", scrolled ? "text-forest" : "text-paper")}
+          className={cn("transition-colors", solid ? "text-forest" : "text-paper")}
         >
           <Logo className="text-xl" />
         </a>
@@ -73,7 +78,7 @@ export function Nav() {
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "text-sm font-display tracking-wide transition-opacity hover:opacity-60",
-                  scrolled ? "text-forest" : "text-paper/90",
+                  solid ? "text-forest" : "text-paper/90",
                   active && "underline decoration-olive decoration-2 underline-offset-8",
                 )}
               >
@@ -90,7 +95,7 @@ export function Nav() {
             rel="noopener noreferrer"
             className={cn(
               "hidden items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium font-display transition-all sm:inline-flex",
-              scrolled
+              solid
                 ? "bg-forest text-paper hover:bg-forest-deep"
                 : "bg-paper text-forest hover:bg-white",
             )}
@@ -99,7 +104,10 @@ export function Nav() {
           </a>
           <button
             onClick={() => setOpen(true)}
-            className={cn("md:hidden", scrolled ? "text-forest" : "text-paper")}
+            className={cn(
+              "-m-2 p-2 md:hidden",
+              solid ? "text-forest" : "text-paper",
+            )}
             aria-label="Open menu"
           >
             <Menu />
@@ -111,7 +119,11 @@ export function Nav() {
         <div className="fixed inset-0 z-50 flex flex-col bg-forest-deep text-paper md:hidden">
           <div className="flex items-center justify-between px-6 py-5">
             <Logo className="text-xl" />
-            <button onClick={() => setOpen(false)} aria-label="Close menu">
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+              className="-m-2 p-2"
+            >
               <X />
             </button>
           </div>

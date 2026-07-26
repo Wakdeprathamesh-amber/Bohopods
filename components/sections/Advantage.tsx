@@ -1,9 +1,10 @@
 import Image from "next/image";
-import { Stamp } from "lucide-react";
+import { ArrowUpRight, MessageCircle, Stamp } from "lucide-react";
 import { Container, Section, Eyebrow } from "../primitives";
 import { Reveal } from "../Reveal";
 import { CountUp } from "../CountUp";
 import { Topo } from "../decor/Topo";
+import { waLink, waMsg } from "@/lib/site";
 
 const stats = [
   { to: 45, prefix: "30–", suffix: "", label: "days to install" },
@@ -12,33 +13,23 @@ const stats = [
   { to: 2, prefix: "1–", suffix: " yr", label: "typical ROI" },
 ];
 
-/**
- * The six core USPs, each carried by an illustrated medallion from the
- * Bohopods brochure itself (crane-lift = temporary/relocatable, layers =
- * industrial build, handshake = AMC, plug = plug & play, sun/snow = weather).
- */
-const usps = [
-  {
-    img: "/images/renders/boho-032.jpg",
-    alt: "Illustration of a crane lifting a Bohopod into place",
-    title: "Temporary structure — no FSI",
-    body: "Classified as temporary, so it doesn't count toward your FSI.",
-  },
+/** Brochure medallions carry the USPs (crane = temporary, layers = build, …). */
+const medallions = [
   {
     img: "/images/renders/boho-038.jpg",
-    alt: "Illustration of engineered material layers built to last decades",
+    alt: "Illustration of engineered material layers",
     title: "Industrial-grade build",
     body: "Engineered materials, made to endure 30+ years.",
   },
   {
     img: "/images/renders/boho-034.jpg",
-    alt: "Illustration of an annual maintenance handshake and checklist",
+    alt: "Illustration of the annual maintenance handshake",
     title: "AMC after-care",
     body: "Annual maintenance & after-sales care, always on.",
   },
   {
     img: "/images/renders/boho-029.jpg",
-    alt: "Illustration of a power plug — arrives ready to live in",
+    alt: "Illustration of a power plug",
     title: "Plug & play install",
     body: "Arrives ready — a quick, clean on-site install.",
   },
@@ -48,13 +39,15 @@ const usps = [
     title: "Weather-tolerant",
     body: "Built for Indian extremes, coast to ghats.",
   },
-  {
-    img: null,
-    alt: "",
-    title: "No municipal permissions",
-    body: "Skip the red tape — CRZ-1 friendly, nominal approvals.",
-  },
 ];
+
+/* Glass tiles: translucent over the topo lines, lifting toward you on hover */
+const tile =
+  "bento rounded-2xl border border-white/50 bg-paper/55 p-5 backdrop-blur-md " +
+  "shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_2px_rgba(42,42,34,0.04)] " +
+  "transition-all duration-500 will-change-transform " +
+  "hover:-translate-y-1 hover:scale-[1.03] hover:border-white/70 hover:bg-paper/75 " +
+  "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_18px_40px_-12px_rgba(54,68,31,0.25)]";
 
 export function Advantage() {
   return (
@@ -66,61 +59,104 @@ export function Advantage() {
             <Eyebrow>The Bohopods Advantage</Eyebrow>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-4 text-3xl font-light md:text-4xl">
+            <h2 className="mt-4 text-display font-light">
               The hard parts? Already handled.
             </h2>
           </Reveal>
         </div>
 
-        {/* Count-up stats */}
+        {/* Bento — hover one tile and the rest soften */}
         <Reveal delay={0.08}>
-          <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
+          <div className="mt-10 grid grid-cols-2 gap-3.5 md:grid-cols-4 [&:has(.bento:hover)_.bento:not(:hover)]:opacity-60 [&:has(.bento:hover)_.bento:not(:hover)]:scale-[0.985]">
+            {/* Headline USP — the one nobody else can say */}
+            <article className={`${tile} group relative col-span-2 row-span-2 flex flex-col justify-between overflow-hidden`}>
+              <Topo className="pointer-events-none absolute -right-10 -top-10 h-64 w-64 text-olive/10" />
+              <div className="relative size-24 overflow-hidden rounded-full border border-sand bg-forest-deep shadow-md shadow-forest/10 transition-transform duration-500 group-hover:scale-105 md:size-32">
+                <Image
+                  src="/images/renders/boho-032.jpg"
+                  alt="Illustration of a crane lifting a Bohopod into place"
+                  fill
+                  sizes="128px"
+                  className="scale-110 object-cover"
+                />
+              </div>
+              <div className="relative mt-6">
+                <h3 className="font-display text-2xl text-forest md:text-3xl">
+                  Temporary structure — no FSI
+                </h3>
+                <p className="mt-2 max-w-md leading-relaxed text-muted">
+                  A Bohopod is classified as a temporary structure, so it
+                  doesn&rsquo;t count toward your FSI — and it can even be
+                  lifted and relocated if your plans change.
+                </p>
+              </div>
+            </article>
+
+            {/* Count-up stats */}
             {stats.map((s) => (
-              <div key={s.label} className="text-center">
+              <article key={s.label} className={`${tile} flex flex-col justify-center text-center`}>
                 <CountUp
                   to={s.to}
                   prefix={s.prefix}
                   suffix={s.suffix}
-                  className="font-display text-4xl font-light text-forest md:text-5xl"
+                  className="font-display text-3xl font-light text-forest md:text-4xl"
                 />
-                <div className="mt-1 text-xs uppercase tracking-widest text-muted">
+                <div className="mt-1 text-[0.65rem] uppercase tracking-widest text-muted">
                   {s.label}
                 </div>
-              </div>
+              </article>
             ))}
-          </div>
-        </Reveal>
 
-        {/* Illustrated USP medallions */}
-        <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 xl:grid-cols-6">
-          {usps.map((u, i) => (
-            <Reveal key={u.title} delay={(i % 6) * 0.05} className="h-full">
-              <div className="group flex h-full flex-col items-center text-center">
-                <div className="relative size-24 overflow-hidden rounded-full border border-sand bg-forest-deep shadow-md shadow-forest/10 transition-transform duration-500 group-hover:scale-105 md:size-28">
-                  {u.img ? (
-                    <Image
-                      src={u.img}
-                      alt={u.alt}
-                      fill
-                      sizes="112px"
-                      className="scale-110 object-cover"
-                    />
-                  ) : (
-                    <span className="flex h-full w-full items-center justify-center rounded-full bg-[#efe6d3]">
-                      <Stamp className="size-10 text-forest/80" strokeWidth={1.4} />
-                    </span>
-                  )}
+            {/* Medallion USPs */}
+            {medallions.map((m) => (
+              <article key={m.title} className={`${tile} group`}>
+                <div className="relative size-14 overflow-hidden rounded-full border border-sand bg-forest-deep transition-transform duration-500 group-hover:scale-105">
+                  <Image src={m.img} alt={m.alt} fill sizes="56px" className="scale-110 object-cover" />
                 </div>
-                <h3 className="mt-4 font-display text-sm font-medium leading-snug text-forest">
-                  {u.title}
+                <h3 className="mt-3 font-display text-sm font-medium leading-snug text-forest">
+                  {m.title}
                 </h3>
-                <p className="mt-1.5 max-w-[24ch] text-xs leading-relaxed text-muted">
-                  {u.body}
+                <p className="mt-1 text-xs leading-relaxed text-muted">{m.body}</p>
+              </article>
+            ))}
+
+            {/* Permissions */}
+            <article className={`${tile} col-span-2 flex items-center gap-4`}>
+              <span className="flex size-14 shrink-0 items-center justify-center rounded-full border border-sand bg-[#efe6d3]">
+                <Stamp className="size-6 text-forest/80" strokeWidth={1.5} />
+              </span>
+              <div>
+                <h3 className="font-display text-sm font-medium text-forest">
+                  No municipal permissions
+                </h3>
+                <p className="mt-0.5 text-xs leading-relaxed text-muted">
+                  Skip the red tape — CRZ-1 friendly, nominal approvals only.
                 </p>
               </div>
-            </Reveal>
-          ))}
-        </div>
+            </article>
+
+            {/* CTA tile */}
+            <a
+              href={waLink(waMsg.general)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bento col-span-2 flex items-center justify-between gap-4 rounded-2xl bg-forest/95 p-5 text-paper backdrop-blur-md transition-all duration-500 will-change-transform hover:-translate-y-1 hover:scale-[1.03] hover:bg-forest-deep hover:shadow-[0_18px_40px_-12px_rgba(33,44,19,0.45)]"
+            >
+              <div className="flex items-center gap-3">
+                <MessageCircle className="size-5 text-sage" />
+                <div>
+                  <div className="font-display text-sm font-medium">
+                    Questions about any of this?
+                  </div>
+                  <div className="text-xs text-paper/70">
+                    Ask us on WhatsApp — friendly, no pressure.
+                  </div>
+                </div>
+              </div>
+              <ArrowUpRight className="size-5 shrink-0 text-sage" />
+            </a>
+          </div>
+        </Reveal>
       </Container>
     </Section>
   );

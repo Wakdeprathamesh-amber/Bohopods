@@ -30,6 +30,11 @@ export function Section({
   );
 }
 
+/**
+ * Section marker — the wayfinding label above every section heading.
+ * Deliberately prominent (users navigate by these): larger than a kicker,
+ * anchored by a consistent bronze diamond the eye learns to scan for.
+ */
 export function Eyebrow({
   children,
   className,
@@ -37,7 +42,17 @@ export function Eyebrow({
   children: React.ReactNode;
   className?: string;
 }) {
-  return <span className={cn("kicker text-olive-deep", className)}>{children}</span>;
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-3 font-display text-sm font-medium uppercase tracking-[0.26em] text-olive-deep md:text-base",
+        className,
+      )}
+    >
+      <span className="size-1.5 shrink-0 rotate-45 bg-bronze" aria-hidden="true" />
+      {children}
+    </span>
+  );
 }
 
 type CTAVariant = "primary" | "light" | "olive" | "outlineLight" | "outlineDark";

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /** Mixed-size gallery grid with a full-screen lightbox (keyboard: Esc / ←→). */
@@ -38,28 +38,29 @@ export function PodGallery({
 
   return (
     <>
-      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {/* Masonry — varied frames like a printed lookbook */}
+      <div className="mt-6 columns-2 gap-4 lg:columns-3">
         {images.map((src, i) => (
           <button
             key={src}
             onClick={() => setOpen(i)}
             aria-label={`Open ${podName} photo ${i + 1} of ${images.length}`}
             className={cn(
-              "group relative aspect-[4/3] overflow-hidden rounded-2xl border border-sand",
-              i === 0 && "col-span-2 row-span-2",
+              "group relative mb-4 block w-full break-inside-avoid overflow-hidden rounded-2xl border border-sand",
+              ["aspect-[4/3]", "aspect-[3/4]", "aspect-square", "aspect-[4/5]", "aspect-[16/11]", "aspect-[3/4]"][i % 6],
             )}
           >
             <Image
               src={src}
               alt={`${podName} pod view ${i + 1}`}
               fill
-              sizes={
-                i === 0
-                  ? "(max-width:1024px) 100vw, 50vw"
-                  : "(max-width:1024px) 50vw, 25vw"
-              }
+              sizes="(max-width:1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
+            <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-deep/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+            <span className="pointer-events-none absolute bottom-3 left-3 flex items-center gap-1.5 font-display text-xs text-paper opacity-0 transition-all duration-500 group-hover:opacity-100">
+              <Maximize2 className="size-3.5" /> {podName} · {i + 1}/{images.length}
+            </span>
           </button>
         ))}
       </div>

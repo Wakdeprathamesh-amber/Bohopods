@@ -116,6 +116,31 @@
   text-shadow: 0 1px 28px rgba(0, 0, 0, 0.38);
 }
 
+/* ===== Marquee (reviews) ===== */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-x var(--marquee-dur, 48s) linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* ===== Pillar showcase progress ===== */
+@keyframes grow-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.animate-grow-x {
+  transform-origin: left;
+  animation: grow-x 5s linear forwards;
+}
+
 /* ===== 3D brochure teaser book ===== */
 .book-scene {
   perspective: 1800px;

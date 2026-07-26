@@ -1,8 +1,7 @@
 import { Factory, Leaf, ShieldCheck } from "lucide-react";
 import { Container, Section, Eyebrow } from "../primitives";
 import { Reveal } from "../Reveal";
-import { icons } from "../icons";
-import { pillars } from "@/lib/site";
+import { PillarShowcase } from "../PillarShowcase";
 
 const craft = [
   {
@@ -26,13 +25,19 @@ export function WhyBoho() {
   return (
     <Section id="why" className="bg-cream">
       <Container>
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="text-center">
           <Reveal>
             <Eyebrow>Owning land is the beginning of a legacy</Eyebrow>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-5 text-display font-light text-balance">
-              Your land should start giving back the moment you own it.
+            {/* Two hard single lines — fluid size keeps each on one line at any width */}
+            <h2 className="mt-5 font-light">
+              <span className="block whitespace-nowrap text-[clamp(1.05rem,4.6vw,3.9rem)] leading-[1.15]">
+                Your land should start giving back
+              </span>
+              <span className="block whitespace-nowrap font-serif-i font-normal text-olive-deep text-[clamp(1.05rem,4.6vw,3.9rem)] leading-[1.25]">
+                the moment you own it.
+              </span>
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
@@ -45,25 +50,12 @@ export function WhyBoho() {
           </Reveal>
         </div>
 
-        {/* Pillars — open layout, no cards */}
-        <div className="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-          {pillars.map((p, i) => {
-            const Icon = icons[p.icon];
-            return (
-              <Reveal key={p.title} delay={(i % 3) * 0.05}>
-                <div>
-                  <span className="inline-flex size-11 items-center justify-center rounded-full bg-olive/15 text-forest">
-                    {Icon ? <Icon className="size-5" /> : null}
-                  </span>
-                  <h3 className="mt-4 text-lg">{p.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted">
-                    {p.body}
-                  </p>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
+        {/* Pillars — interactive showcase: click a pillar, see the scene */}
+        <Reveal delay={0.1}>
+          <div className="mt-14">
+            <PillarShowcase />
+          </div>
+        </Reveal>
 
         {/* Craft — merged brand/About beat */}
         <Reveal delay={0.1}>

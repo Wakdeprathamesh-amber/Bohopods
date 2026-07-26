@@ -3,7 +3,7 @@ import { Download, MessageCircle } from "lucide-react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
-import { Container, Eyebrow, CTA } from "@/components/primitives";
+import { Eyebrow, CTA } from "@/components/primitives";
 import { FlipBook } from "@/components/FlipBook";
 import { waLink, waMsg } from "@/lib/site";
 
@@ -25,31 +25,22 @@ export default function BrochurePage() {
       <Nav />
       {/* pt-24 clears the fixed nav; the rest is a tight header → book → CTA rhythm */}
       <main className="pt-24">
-        <Container className="max-w-5xl">
-          {/* Header */}
-          <div className="mx-auto max-w-2xl pt-8 text-center md:pt-12">
+        <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-6">
+          {/* Compact header — the viewer is the star */}
+          <div className="mx-auto max-w-2xl pt-6 text-center md:pt-8">
             <Eyebrow>The Brochure</Eyebrow>
-            <h1 className="mt-3 text-4xl font-light text-balance md:text-5xl">
+            <h1 className="mt-3 text-3xl font-light text-balance md:text-4xl">
               Flip through Boho Pods.
             </h1>
-            <p className="mx-auto mt-4 max-w-xl text-muted">
-              Our story, the full pod range, specs and ownership options — page
-              by page, the way it was designed to be read.
+            <p className="mx-auto mt-2 max-w-xl text-sm text-muted">
+              Drag a page corner, use the arrows, zoom in — or take the PDF with
+              you from the toolbar below.
             </p>
-            <CTA
-              href="/brochure/bohopods-brochure.pdf"
-              download="Bohopods-Brochure.pdf"
-              variant="outlineDark"
-              className="mt-6"
-            >
-              <Download className="size-4" /> Download the brochure
-              <span className="text-muted">PDF · 4 MB</span>
-            </CTA>
           </div>
 
-          {/* Flip-book */}
-          <div className="mt-10">
-            <FlipBook pages={PAGES} />
+          {/* Immersive viewer */}
+          <div className="mt-6">
+            <FlipBook pages={PAGES} pdfHref="/brochure/bohopods-brochure.pdf" />
           </div>
 
           {/* Closing CTA */}
@@ -70,7 +61,7 @@ export default function BrochurePage() {
               </CTA>
             </div>
           </div>
-        </Container>
+        </div>
       </main>
       <Footer />
       <FloatingWhatsApp />
