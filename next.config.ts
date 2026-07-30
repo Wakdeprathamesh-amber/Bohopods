@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     // so builds without Cloudinary env still work.
     loader: "custom",
     loaderFile: "./cloudinary-loader.js",
+    qualities: [75, 85, 88, 90, 92],
   },
 };
 

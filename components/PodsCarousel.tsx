@@ -69,41 +69,54 @@ export function PodsCarousel({ pods }: { pods: Pod[] }) {
   const rest = pods.slice(3);
 
   const arrowClass =
-    "inline-flex size-11 items-center justify-center rounded-full border border-sand bg-paper text-forest transition-all hover:bg-cream disabled:opacity-30 disabled:hover:bg-paper";
+    "hidden md:inline-flex absolute top-1/2 z-20 size-11 -translate-y-1/2 items-center justify-center rounded-full border border-sand bg-paper text-forest shadow-sm transition-all hover:bg-cream hover:shadow-md disabled:pointer-events-none disabled:opacity-0";
 
   return (
     <div className="relative">
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="-ml-5 flex touch-pan-y">
-          {first.map((pod) => (
-            <div key={pod.slug} className="min-w-0 flex-[0_0_85%] pl-5 sm:flex-[0_0_50%] lg:flex-[0_0_25%]">
-              <PodCard pod={pod} />
+      {/* Row + side arrows share this wrapper so the arrows center on the
+          card height, not the counter text below. */}
+      <div className="relative">
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="-ml-5 flex touch-pan-y">
+            {first.map((pod) => (
+              <div key={pod.slug} className="min-w-0 flex-[0_0_85%] pl-5 sm:flex-[0_0_50%] lg:flex-[0_0_25%]">
+                <PodCard pod={pod} />
+              </div>
+            ))}
+            <div className="min-w-0 flex-[0_0_85%] pl-5 sm:flex-[0_0_50%] lg:flex-[0_0_25%]">
+              <HomesCard />
             </div>
-          ))}
-          <div className="min-w-0 flex-[0_0_85%] pl-5 sm:flex-[0_0_50%] lg:flex-[0_0_25%]">
-            <HomesCard />
+            {rest.map((pod) => (
+              <div key={pod.slug} className="min-w-0 flex-[0_0_85%] pl-5 sm:flex-[0_0_50%] lg:flex-[0_0_25%]">
+                <PodCard pod={pod} />
+              </div>
+            ))}
           </div>
-          {rest.map((pod) => (
-            <div key={pod.slug} className="min-w-0 flex-[0_0_85%] pl-5 sm:flex-[0_0_50%] lg:flex-[0_0_25%]">
-              <PodCard pod={pod} />
-            </div>
-          ))}
         </div>
+
+        <button
+          onClick={() => emblaApi?.scrollPrev()}
+          disabled={!canPrev}
+          aria-label="Previous pods"
+          className={`${arrowClass} -left-4 lg:-left-5`}
+        >
+          <ChevronLeft className="size-5" />
+        </button>
+        <button
+          onClick={() => emblaApi?.scrollNext()}
+          disabled={!canNext}
+          aria-label="More pods"
+          className={`${arrowClass} -right-4 lg:-right-5`}
+        >
+          <ChevronRight className="size-5" />
+        </button>
       </div>
 
-      <div className="mt-5 flex items-center justify-between">
-        <p className="text-sm text-muted">
-          {3 + rest.length + 1} of 12+ models — swipe or use the arrows
-        </p>
-        <div className="flex gap-2.5">
-          <button onClick={() => emblaApi?.scrollPrev()} disabled={!canPrev} aria-label="Previous pods" className={arrowClass}>
-            <ChevronLeft className="size-5" />
-          </button>
-          <button onClick={() => emblaApi?.scrollNext()} disabled={!canNext} aria-label="More pods" className={arrowClass}>
-            <ChevronRight className="size-5" />
-          </button>
-        </div>
-      </div>
+      <p className="mt-5 text-sm text-muted">
+        {3 + rest.length + 1} of 12+ models —{" "}
+        <span className="md:hidden">swipe to see more</span>
+        <span className="hidden md:inline">swipe or use the arrows</span>
+      </p>
     </div>
   );
 }
