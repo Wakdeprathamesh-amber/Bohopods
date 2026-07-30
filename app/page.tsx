@@ -16,6 +16,7 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { BrochureTeaser } from "@/components/sections/BrochureTeaser";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
+import { SeoContent } from "@/components/sections/SeoContent";
 import { Footer } from "@/components/Footer";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 
@@ -40,6 +41,7 @@ export default function Home() {
         <Testimonials />
         <BrochureTeaser />
         <Faq />
+        <SeoContent />
         <FinalCta />
       </main>
       <Footer />

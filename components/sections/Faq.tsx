@@ -1,5 +1,5 @@
 import { MessageCircle, Plus } from "lucide-react";
-import { Container, Section, Eyebrow, CTA } from "../primitives";
+import { Container, Section, SectionHeading, SectionLead, CTA } from "../primitives";
 import { Reveal } from "../Reveal";
 import { faqs, waLink, waMsg } from "@/lib/site";
 
@@ -23,12 +23,12 @@ export function Faq() {
       <Container className="max-w-3xl">
         <div className="text-center">
           <Reveal>
-            <Eyebrow>Questions</Eyebrow>
+            <SectionHeading className="justify-center">Questions</SectionHeading>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-4 text-display font-light">
+            <SectionLead className="mx-auto">
               Good questions, clear answers.
-            </h2>
+            </SectionLead>
           </Reveal>
         </div>
 

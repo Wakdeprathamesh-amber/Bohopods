@@ -24,16 +24,69 @@ export function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className={cn("py-20 md:py-28", className)}>
+    <section id={id} className={cn("py-14 md:py-28", className)}>
       {children}
     </section>
   );
 }
 
 /**
- * Section marker — the wayfinding label above every section heading.
- * Deliberately prominent (users navigate by these): larger than a kicker,
- * anchored by a consistent bronze diamond the eye learns to scan for.
+ * Primary section heading — the largest keyword in each band (How it works,
+ * The Pods, Gallery, etc.). Sized near the hero but kept in the brand's light
+ * display weight, so it reads as elegant scale rather than a bold headline.
+ */
+export function SectionHeading({
+  children,
+  className,
+  as: Tag = "h2",
+  id,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  as?: "h1" | "h2" | "h3";
+  id?: string;
+}) {
+  return (
+    <Tag
+      id={id}
+      className={cn(
+        "section-title inline-flex max-w-full items-start gap-2.5 font-display text-section font-light tracking-[-0.01em] text-forest md:gap-3.5",
+        className,
+      )}
+    >
+      <span
+        className="mt-[0.5em] size-2 shrink-0 rotate-45 bg-bronze md:mt-[0.55em] md:size-2.5"
+        aria-hidden="true"
+      />
+      <span className="min-w-0 text-balance">{children}</span>
+    </Tag>
+  );
+}
+
+/**
+ * Supporting line under a SectionHeading — quieter than the keyword title.
+ */
+export function SectionLead({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <p
+      className={cn(
+        "mt-3 max-w-2xl text-base font-normal leading-relaxed text-muted md:mt-4 md:text-lg",
+        className,
+      )}
+    >
+      {children}
+    </p>
+  );
+}
+
+/**
+ * Compact section marker — for secondary labels only (not primary headings).
  */
 export function Eyebrow({
   children,

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { Container, Section, Eyebrow, CTA } from "../primitives";
+import { Container, Section, SectionHeading, SectionLead, CTA } from "../primitives";
 import { Reveal } from "../Reveal";
 import { cldUrl } from "@/lib/cloudinary";
 
@@ -10,10 +10,10 @@ export function BrochureTeaser() {
     <Section className="overflow-hidden bg-forest text-paper">
       <Container className="grid items-center gap-12 lg:grid-cols-2">
         <Reveal>
-          <Eyebrow className="text-sage">The Brochure</Eyebrow>
-          <h2 className="mt-4 text-display font-light text-paper">
+          <SectionHeading className="text-paper">The Brochure</SectionHeading>
+          <SectionLead className="text-sage">
             Our story, in your hands.
-          </h2>
+          </SectionLead>
           <p className="mt-5 max-w-md leading-relaxed text-paper/70">
             The whole world of Boho Pods — every pod, the process, ownership and
             the philosophy — laid out in nineteen beautiful pages. Go on, turn

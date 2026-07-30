@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { Container, Section, Eyebrow } from "../primitives";
+import { Container, Section, SectionHeading, SectionLead } from "../primitives";
 import { Reveal } from "../Reveal";
 import { PodsCarousel } from "../PodsCarousel";
 import { retreatPods, utilityPods } from "@/lib/pods";
@@ -14,20 +14,20 @@ export function Pods() {
     <Section id="pods" className="md:py-24">
       <Container>
         <div className="flex flex-col items-start justify-between gap-5 md:flex-row md:items-end">
-          <div className="max-w-2xl">
+          <div className="max-w-3xl">
             <Reveal>
-              <Eyebrow>The Pods</Eyebrow>
+              <SectionHeading>The Pods</SectionHeading>
             </Reveal>
             <Reveal delay={0.05}>
-              <h2 className="mt-4 text-display font-light">
+              <SectionLead>
                 Discover the art of living, one pod at a time.
-              </h2>
+              </SectionLead>
             </Reveal>
           </div>
           <Reveal delay={0.1}>
             <Link
               href="/pods"
-              className="inline-flex items-center gap-1.5 font-display text-forest transition-colors hover:text-olive"
+              className="inline-flex items-center gap-1.5 py-2 font-display text-forest transition-colors hover:text-olive"
             >
               View all pods <ArrowUpRight className="size-4" />
             </Link>

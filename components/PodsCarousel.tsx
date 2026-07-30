@@ -7,15 +7,12 @@ import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { PodCard } from "./PodCard";
 import type { Pod } from "@/lib/pods";
 import { homesTeaser } from "@/lib/pods";
-import { waLink, waMsg } from "@/lib/site";
 
-/** The 3-BHK home — enquiry card (no detail page until specs/photos land). */
+/** The 3-BHK home — teaser card linking into the pods catalogue homes band. */
 function HomesCard() {
   return (
     <a
-      href={waLink(waMsg.pod(homesTeaser.name))}
-      target="_blank"
-      rel="noopener noreferrer"
+      href="/pods#homes"
       className="group relative block aspect-[4/5] overflow-hidden rounded-2xl border border-sand transition-shadow duration-300 hover:shadow-xl hover:shadow-forest/10"
     >
       <Image
@@ -39,7 +36,7 @@ function HomesCard() {
           <p className="mt-0.5 text-xs text-paper/60">{homesTeaser.altLine}</p>
         </div>
         <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-paper/30 bg-paper/10 px-4 py-2 font-display text-sm text-paper backdrop-blur-sm transition-colors duration-300 group-hover:bg-paper group-hover:text-forest">
-          Enquire <ArrowUpRight className="size-4" />
+          View <ArrowUpRight className="size-4" />
         </span>
       </div>
     </a>

@@ -61,7 +61,7 @@ export function GatsbyHeroSlideshow() {
         playsInline
         preload="metadata"
         poster="/videos/hero/hero-poster.jpg"
-        className="absolute inset-0 size-full object-cover transition-opacity duration-1000"
+        className="absolute inset-0 size-full object-cover transition-opacity duration-1000 will-change-[opacity]"
         style={{ opacity: videoMode ? 1 : 0 }}
         aria-hidden={videoMode ? undefined : true}
       >

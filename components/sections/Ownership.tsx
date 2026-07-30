@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { MessageCircle } from "lucide-react";
-import { Container, Section, Eyebrow, CTA } from "../primitives";
+import { Container, Section, SectionHeading, SectionLead, CTA } from "../primitives";
 import { Reveal } from "../Reveal";
 import { RoiChart } from "../RoiChart";
 import { ownership, waLink, waMsg } from "@/lib/site";
@@ -28,10 +28,10 @@ export function Ownership() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <Eyebrow>Ownership &amp; Revenue</Eyebrow>
-            <h2 className="mt-4 text-display font-light">
+            <SectionHeading>Ownership &amp; Revenue</SectionHeading>
+            <SectionLead>
               Make your land pay for itself.
-            </h2>
+            </SectionLead>
             <p className="mt-5 max-w-lg leading-relaxed text-muted">
               With as little as ~2,000 sq ft, a Bohopod turns idle land into a
               high-yield rental — listed on Airbnb, StayVista and Booking.com — that

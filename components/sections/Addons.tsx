@@ -14,7 +14,7 @@ import {
   Waves,
   type LucideIcon,
 } from "lucide-react";
-import { Container, Section, Eyebrow, CTA } from "../primitives";
+import { Container, Section, SectionHeading, SectionLead, CTA } from "../primitives";
 import { Reveal } from "../Reveal";
 import { waLink } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -90,12 +90,12 @@ export function Addons() {
   const [active, setActive] = useState(0);
 
   return (
-    <Section className="border-y border-sand/60 bg-cream/50 py-20 md:py-24">
+    <Section className="border-y border-sand/60 bg-cream/50 py-14 md:py-24">
       <Container>
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <Reveal>
-            <Eyebrow>Add-ons</Eyebrow>
-            <h2 className="mt-4 text-display font-light">Make it yours.</h2>
+            <SectionHeading>Add-ons</SectionHeading>
+            <SectionLead>Make it yours.</SectionLead>
           </Reveal>
           <Reveal delay={0.06}>
             <p className="max-w-md border-l-2 border-olive pl-5 font-serif-i text-lg leading-snug text-forest md:text-xl">
@@ -208,7 +208,7 @@ export function Addons() {
                   onClick={() => setActive(i)}
                   aria-pressed={isActive}
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-all duration-300",
+                    "inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm transition-all duration-300",
                     isActive
                       ? "border-forest bg-forest text-paper shadow-sm"
                       : "border-sand bg-paper text-ink hover:border-olive/40 hover:bg-paper/80",

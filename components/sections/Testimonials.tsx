@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
-import { Container, Section, Eyebrow } from "../primitives";
+import { Container, Section, SectionHeading, SectionLead } from "../primitives";
 import { Reveal } from "../Reveal";
 import { testimonials } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -72,14 +72,16 @@ export function Testimonials() {
   return (
     <Section className="overflow-hidden bg-cream">
       <Container>
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <Eyebrow>Loved by owners</Eyebrow>
+            <SectionHeading className="justify-center">
+              Loved by owners
+            </SectionHeading>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-4 text-display font-light">
+            <SectionLead className="mx-auto">
               Quietly, completely at home.
-            </h2>
+            </SectionLead>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-4 flex items-center justify-center gap-2 text-sm text-muted">

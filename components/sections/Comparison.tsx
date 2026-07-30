@@ -1,5 +1,5 @@
 import { Check, X } from "lucide-react";
-import { Container, Section, Eyebrow, CTA } from "../primitives";
+import { Container, Section, SectionHeading, SectionLead, CTA } from "../primitives";
 import { Reveal } from "../Reveal";
 import { Topo } from "../decor/Topo";
 import { waLink, waMsg } from "@/lib/site";
@@ -29,14 +29,14 @@ export function Comparison() {
     <Section className="relative overflow-hidden bg-paper">
       <Topo className="pointer-events-none absolute -top-8 left-0 h-72 w-full text-olive/10" />
       <Container className="relative">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <Eyebrow>Why prefab</Eyebrow>
+            <SectionHeading className="justify-center">Why prefab</SectionHeading>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-4 text-display font-light text-balance">
+            <SectionLead className="mx-auto">
               Why wait years to build, when you can stay this season?
-            </h2>
+            </SectionLead>
           </Reveal>
         </div>
 

@@ -1,4 +1,4 @@
-import { Container, Section, Eyebrow } from "../primitives";
+import { Container, Section, SectionHeading, SectionLead } from "../primitives";
 import { Reveal } from "../Reveal";
 import { LocationsScene } from "../LocationsScene";
 
@@ -6,14 +6,16 @@ export function Locations() {
   return (
     <Section id="locations" className="bg-forest text-paper md:py-24">
       <Container>
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <Eyebrow className="text-sage">Locations</Eyebrow>
+            <SectionHeading className="justify-center text-paper">
+              Locations
+            </SectionHeading>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-4 text-display font-light text-paper">
+            <SectionLead className="mx-auto text-sage">
               Where will yours stand?
-            </h2>
+            </SectionLead>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 text-paper/70">

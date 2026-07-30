@@ -45,10 +45,13 @@ export function Footer() {
           <h4 className="font-display text-sm uppercase tracking-widest text-paper">
             Explore
           </h4>
-          <ul className="mt-4 space-y-2.5 text-sm">
+          <ul className="mt-3 space-y-0.5 text-sm">
             {nav.map((l) => (
               <li key={l.href}>
-                <a href={l.href} className="transition-colors hover:text-paper">
+                <a
+                  href={l.href}
+                  className="inline-block py-1.5 transition-colors hover:text-paper"
+                >
                   {l.label}
                 </a>
               </li>

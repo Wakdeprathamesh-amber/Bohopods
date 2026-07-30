@@ -8,10 +8,15 @@ import { FlipBook } from "@/components/FlipBook";
 import { waLink, waMsg } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Brochure",
+  title: "Digital Brochure | Prefab Cabins, Specs & Ownership Options",
   description:
-    "Flip through the Boho Pods brochure — our story, the full pod range, specs and ownership options, page by page.",
+    "Flip through the Boho Pods brochure — our story, the full prefab pod range, technical specs, pricing cues and ownership options, page by page. Download the PDF anytime.",
   alternates: { canonical: "/brochure" },
+  openGraph: {
+    title: "Boho Pods Brochure",
+    description:
+      "Explore the full range of prefab luxury cabins and glamping pods — specs, process and ownership.",
+  },
 };
 
 const PAGES = Array.from(
