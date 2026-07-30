@@ -20,7 +20,7 @@ export function Process() {
       <Container>
         <div className="mx-auto max-w-4xl text-center">
           <Reveal>
-            <SectionHeading className="justify-center text-paper">
+            <SectionHeading className="text-paper">
               How it works
             </SectionHeading>
           </Reveal>

@@ -23,7 +23,7 @@ export function Faq() {
       <Container className="max-w-3xl">
         <div className="text-center">
           <Reveal>
-            <SectionHeading className="justify-center">Questions</SectionHeading>
+            <SectionHeading>Questions</SectionHeading>
           </Reveal>
           <Reveal delay={0.05}>
             <SectionLead className="mx-auto">

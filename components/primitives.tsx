@@ -50,15 +50,11 @@ export function SectionHeading({
     <Tag
       id={id}
       className={cn(
-        "section-title inline-flex max-w-full items-start gap-2.5 font-display text-section font-light tracking-[-0.01em] text-forest md:gap-3.5",
+        "section-title max-w-full text-balance font-display text-section font-light tracking-[-0.01em] text-forest",
         className,
       )}
     >
-      <span
-        className="mt-[0.5em] size-2 shrink-0 rotate-45 bg-bronze md:mt-[0.55em] md:size-2.5"
-        aria-hidden="true"
-      />
-      <span className="min-w-0 text-balance">{children}</span>
+      {children}
     </Tag>
   );
 }

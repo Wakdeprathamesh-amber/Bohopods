@@ -74,7 +74,7 @@ export function Testimonials() {
       <Container>
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <SectionHeading className="justify-center">
+            <SectionHeading>
               Loved by owners
             </SectionHeading>
           </Reveal>

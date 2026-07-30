@@ -31,7 +31,7 @@ export function Comparison() {
       <Container className="relative">
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <SectionHeading className="justify-center">Why prefab</SectionHeading>
+            <SectionHeading>Why prefab</SectionHeading>
           </Reveal>
           <Reveal delay={0.05}>
             <SectionLead className="mx-auto">

@@ -8,7 +8,7 @@ export function Locations() {
       <Container>
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <SectionHeading className="justify-center text-paper">
+            <SectionHeading className="text-paper">
               Locations
             </SectionHeading>
           </Reveal>

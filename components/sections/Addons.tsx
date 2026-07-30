@@ -92,7 +92,7 @@ export function Addons() {
   return (
     <Section className="border-y border-sand/60 bg-cream/50 py-14 md:py-24">
       <Container>
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <Reveal>
             <SectionHeading>Add-ons</SectionHeading>
             <SectionLead>Make it yours.</SectionLead>
