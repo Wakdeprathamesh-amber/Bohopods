@@ -45,7 +45,25 @@ export function GatsbyHeroSlideshow({
   const [videoMode, setVideoMode] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  /**
+   * Nothing is mounted until the client has decided which film to use. The
+   * scrub flag arrives one render late, so mounting the <video> immediately
+   * meant desktop began downloading the loop file, then swapped to the scrub
+   * file — pulling ~14MB it never plays. The slideshow covers this render.
+   */
+  const [ready, setReady] = useState(false);
+  const [narrow, setNarrow] = useState(false);
   useEffect(() => {
+    const m = window.matchMedia("(max-width: 767px)");
+    const sync = () => setNarrow(m.matches);
+    sync();
+    setReady(true);
+    m.addEventListener("change", sync);
+    return () => m.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     // Swap the film in only once it can play through (slideshow stays the fallback).
@@ -56,7 +74,7 @@ export function GatsbyHeroSlideshow({
       v.load();
       return () => v.removeEventListener("canplaythrough", onReady);
     }
-  }, [scrubbing]);
+  }, [scrubbing, ready]);
 
   /* Drive the playhead from scroll. Seeks are coalesced into one per frame so
      a fast flick can't queue up more seeks than the decoder can service. */
@@ -99,12 +117,19 @@ export function GatsbyHeroSlideshow({
   const scrubSrc = cldVideoUrl("/videos/hero/hero-scrub.mp4", { scrub: true });
   // Local webm stays as a progressive-enhancement fallback; Cloudinary's
   // vc_auto URL already picks the best format when the cloud is configured.
-  const loopMp4 = cldVideoUrl("/videos/hero/hero.mp4");
+  /* Phones get a 720p cut of the loop. The 1080p pair is 14MB+, which is a lot
+     to spend on a muted background on a handset — and at ~400px wide the
+     difference isn't visible. Desktop (reduced-motion) keeps the 1080p file. */
+  const loopMp4 = narrow
+    ? "/videos/hero/hero-mobile.mp4"
+    : cldVideoUrl("/videos/hero/hero.mp4");
   const loopWebm = "/videos/hero/hero.webm";
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-forest-deep">
-      {/* The hero film (preload after first paint; fades in over the slideshow) */}
+      {/* The hero film — mounted only once we know which cut to fetch, so the
+          browser never starts on the wrong one. Fades in over the slideshow. */}
+      {ready && (
       <video
         ref={videoRef}
         // Scroll owns the playhead when scrubbing — no autoplay, no loop.
@@ -125,14 +150,17 @@ export function GatsbyHeroSlideshow({
           <source src={scrubSrc} type="video/mp4" />
         ) : (
           <>
-            {/* Prefer CDN mp4 when Cloudinary is wired; local webm only helps offline. */}
-            {loopMp4.startsWith("http") ? null : (
+            {/* The webm is the 1080p cut. Offering it on a phone means Chrome
+                takes it over the 720p mp4 — 14MB instead of 5MB — so it's
+                desktop-only, and skipped entirely once the CDN is serving. */}
+            {narrow || loopMp4.startsWith("http") ? null : (
               <source src={loopWebm} type="video/webm" />
             )}
             <source src={loopMp4} type="video/mp4" />
           </>
         )}
       </video>
+      )}
 
       {!videoMode &&
         SLIDES.map((s, i) => (
