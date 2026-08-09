@@ -93,14 +93,21 @@ const promise = [
   },
 ];
 
+/* Area figures are the official spec sheet numbers. Values are positional —
+   each row's array must follow the compareSlugs order below:
+        Gatsby            Nomad            Dojopod          Gazepod        */
 const compareRows: { label: string; values: [string, string, string, string] }[] = [
-  { label: "From", values: ["₹35L", "₹20L", "₹25L", "₹28L"] },
-  { label: "Room", values: ["300 sq ft", "150 sq ft study + rest", "270 sq ft", "280 sq ft"] },
-  { label: "Bathroom", values: ["150 sq ft", "80 sq ft", "150 sq ft", "150 sq ft"] },
-  { label: "Deck / outdoor", values: ["200 sq ft covered", "4 ft + ramp", "80 sq ft", "325 sq ft + gazebo"] },
-  { label: "Sleeps", values: ["2+", "1–2", "2 (expandable)", "2 (expandable)"] },
-  { label: "Extra bedroom", values: ["—", "—", "+ ₹7.99L", "+ ₹7.99L"] },
-  { label: "Best for", values: ["Premium weekend home", "Work-from-anywhere", "Harsh-weather rentals", "Indoor-outdoor living"] },
+  { label: "From",          values: ["₹35L",           "₹20L",          "₹25L",          "₹28L"] },
+  { label: "Footprint",     values: ["4,500 sq ft",    "1,200 sq ft",   "1,900 sq ft",   "2,500 sq ft"] },
+  { label: "Built-up",      values: ["1,760 sq ft",    "415 sq ft",     "625 sq ft",     "875 sq ft"] },
+  { label: "Liviable",      values: ["1,700 sq ft",    "398 sq ft",     "580 sq ft",     "825 sq ft"] },
+  { label: "RERA carpet",   values: ["670 sq ft",      "230 sq ft",     "425 sq ft",     "425 sq ft"] },
+  { label: "Room",          values: ["540 sq ft",      "150 sq ft",     "275 sq ft",     "275 sq ft"] },
+  { label: "Bathroom",      values: ["130 sq ft",      "80 sq ft",      "150 sq ft",     "150 sq ft"] },
+  { label: "Deck / outdoor", values: ["200 sq ft covered", "4 ft + ramp", "80 sq ft",    "325 sq ft + gazebo"] },
+  { label: "Sleeps",        values: ["2+",             "1–2",           "2 (expandable)", "2 (expandable)"] },
+  { label: "Extra bedroom", values: ["—",              "—",             "+ ₹7.99L",      "+ ₹7.99L"] },
+  { label: "Best for",      values: ["Premium weekend home", "Work-from-anywhere", "Harsh-weather rentals", "Indoor-outdoor living"] },
 ];
 const compareSlugs = ["gatsby", "nomad", "dojopod", "gazepod"] as const;
 
@@ -336,8 +343,10 @@ export default function PodsPage() {
               <div className="mt-8 overflow-x-auto rounded-2xl border border-sand">
                 <table className="w-full min-w-[760px] border-collapse bg-paper text-left text-sm">
                   <thead>
-                    <tr className="border-b border-sand bg-cream/60">
-                      <th className="p-4 font-display text-xs uppercase tracking-wider text-muted">
+                    <tr className="border-b border-sand bg-cream">
+                      {/* Label column stays pinned while the pods scroll
+                          sideways, so every figure keeps its row name. */}
+                      <th className="sticky left-0 z-20 bg-cream p-4 font-display text-xs uppercase tracking-wider text-muted">
                         Pod
                       </th>
                       {comparePods.map((p) => (
@@ -368,7 +377,7 @@ export default function PodsPage() {
                         key={row.label}
                         className={i % 2 ? "bg-cream/30" : undefined}
                       >
-                        <td className="whitespace-nowrap p-4 font-display text-xs uppercase tracking-wider text-muted">
+                        <td className="sticky left-0 z-10 whitespace-nowrap bg-cream p-4 font-display text-xs uppercase tracking-wider text-muted">
                           {row.label}
                         </td>
                         {row.values.map((v, j) => (
