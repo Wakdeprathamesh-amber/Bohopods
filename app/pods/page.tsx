@@ -19,11 +19,20 @@ import {
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
-import { Container, Section, Eyebrow, CTA } from "@/components/primitives";
+import { Container, Section, Eyebrow, SectionHeading, CTA } from "@/components/primitives";
 import { Reveal } from "@/components/Reveal";
 import { PodCatalogueCard } from "@/components/PodCatalogueCard";
 import { Topo } from "@/components/decor/Topo";
-import { retreatPods, utilityPods, getPod, homesTeaser, pods } from "@/lib/pods";
+import {
+  retreatPods,
+  utilityPods,
+  getPod,
+  homesTeaser,
+  pods,
+  AREA_FIELDS,
+  sqft,
+  type Pod,
+} from "@/lib/pods";
 import { waLink, waMsg } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -93,23 +102,27 @@ const promise = [
   },
 ];
 
-/* Area figures are the official spec sheet numbers. Values are positional —
-   each row's array must follow the compareSlugs order below:
-        Gatsby            Nomad            Dojopod          Gazepod        */
-const compareRows: { label: string; values: [string, string, string, string] }[] = [
-  { label: "From",          values: ["₹35L",           "₹20L",          "₹25L",          "₹28L"] },
-  { label: "Footprint",     values: ["4,500 sq ft",    "1,200 sq ft",   "1,900 sq ft",   "2,500 sq ft"] },
-  { label: "Built-up",      values: ["1,760 sq ft",    "415 sq ft",     "625 sq ft",     "875 sq ft"] },
-  { label: "Liviable",      values: ["1,700 sq ft",    "398 sq ft",     "580 sq ft",     "825 sq ft"] },
-  { label: "RERA carpet",   values: ["670 sq ft",      "230 sq ft",     "425 sq ft",     "425 sq ft"] },
-  { label: "Room",          values: ["540 sq ft",      "150 sq ft",     "275 sq ft",     "275 sq ft"] },
-  { label: "Bathroom",      values: ["130 sq ft",      "80 sq ft",      "150 sq ft",     "150 sq ft"] },
-  { label: "Deck / outdoor", values: ["200 sq ft covered", "4 ft + ramp", "80 sq ft",    "325 sq ft + gazebo"] },
-  { label: "Sleeps",        values: ["2+",             "1–2",           "2 (expandable)", "2 (expandable)"] },
-  { label: "Extra bedroom", values: ["—",              "—",             "+ ₹7.99L",      "+ ₹7.99L"] },
-  { label: "Best for",      values: ["Premium weekend home", "Work-from-anywhere", "Harsh-weather rentals", "Indoor-outdoor living"] },
-];
 const compareSlugs = ["gatsby", "nomad", "dojopod", "gazepod"] as const;
+
+/* Rows that aren't on the spec sheet. Positional — follow compareSlugs order:
+        Gatsby                  Nomad                 Dojopod                 Gazepod              */
+const compareExtras: { label: string; values: [string, string, string, string] }[] = [
+  { label: "Deck / outdoor", values: ["200 sq ft covered", "4 ft + ramp",       "80 sq ft",              "325 sq ft + gazebo"] },
+  { label: "Sleeps",         values: ["2+",                "1–2",               "2 (expandable)",        "2 (expandable)"] },
+  { label: "Extra bedroom",  values: ["—",                 "—",                 "+ ₹7.99L",              "+ ₹7.99L"] },
+  { label: "Best for",       values: ["Premium weekend home", "Work-from-anywhere", "Harsh-weather rentals", "Indoor-outdoor living"] },
+];
+
+/** Area rows come straight from each pod's spec-sheet `areas`, so this table
+ *  and the pod detail pages can never fall out of sync. */
+function buildCompareRows(list: Pod[]) {
+  const price = { label: "From", values: list.map((p) => p.priceFrom ?? "On request") };
+  const areas = AREA_FIELDS.map((f) => ({
+    label: f.label,
+    values: list.map((p) => (p.areas ? sqft(p.areas[f.key]) : "—")),
+  }));
+  return [price, ...areas, ...compareExtras.map((r) => ({ label: r.label, values: [...r.values] }))];
+}
 
 const rangeJsonLd = {
   "@context": "https://schema.org",
@@ -132,6 +145,7 @@ const rangeJsonLd = {
 
 export default function PodsPage() {
   const comparePods = compareSlugs.map((s) => getPod(s)!);
+  const compareRows = buildCompareRows(comparePods);
 
   return (
     <>
@@ -222,10 +236,10 @@ export default function PodsPage() {
         <Section className="py-14 md:py-20">
           <Container>
             <Reveal>
-              <p className="kicker text-olive-deep">Start here</p>
-              <h2 className="mt-3 text-3xl font-light md:text-4xl">
+              <Eyebrow className="text-olive-deep">Start here</Eyebrow>
+              <SectionHeading className="mt-3">
                 What are you dreaming of?
-              </h2>
+              </SectionHeading>
             </Reveal>
             <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {fits.map((f, i) => (
@@ -301,9 +315,9 @@ export default function PodsPage() {
               <div className="flex flex-col justify-between gap-3 md:flex-row md:items-end">
                 <div>
                   <Eyebrow className="text-olive-deep">Retreat &amp; Stay Pods</Eyebrow>
-                  <h2 className="mt-3 text-3xl font-light md:text-4xl">
+                  <SectionHeading className="mt-3">
                     Escapes that earn their keep.
-                  </h2>
+                  </SectionHeading>
                   <p className="mt-3 max-w-xl text-muted">
                     Weekend homes and micro-resort units — designed to photograph
                     beautifully and live comfortably year-round.
@@ -332,9 +346,9 @@ export default function PodsPage() {
           <Container>
             <Reveal>
               <Eyebrow className="text-olive-deep">Side by side</Eyebrow>
-              <h2 className="mt-3 text-3xl font-light md:text-4xl">
+              <SectionHeading className="mt-3">
                 Compare the stay pods.
-              </h2>
+              </SectionHeading>
               <p className="mt-2 text-sm text-muted md:hidden">
                 Swipe the table sideways →
               </p>
@@ -415,8 +429,8 @@ export default function PodsPage() {
                   />
                 </div>
                 <div className="flex flex-col justify-center p-8 text-paper md:p-12">
-                  <p className="kicker text-sage">Modular Homes</p>
-                  <h2 className="mt-3 text-3xl font-light text-paper md:text-4xl">
+                  <Eyebrow className="text-sage">Modular Homes</Eyebrow>
+                  <h2 className="mt-3 font-display text-4xl font-light text-paper md:text-5xl">
                     Need a whole house? We do those too.
                   </h2>
                   <p className="mt-3 max-w-xl text-paper/70">
@@ -431,7 +445,7 @@ export default function PodsPage() {
                           key={item}
                           className="flex items-center gap-2 text-sm text-paper/85"
                         >
-                          <span className="size-1.5 rotate-45 bg-sage" />
+                          <span className="size-1.5 shrink-0 rounded-full bg-sage" />
                           {item}
                         </li>
                       ),
@@ -456,9 +470,9 @@ export default function PodsPage() {
           <Container>
             <Reveal>
               <Eyebrow className="text-olive-deep">Work &amp; Utility Pods</Eyebrow>
-              <h2 className="mt-3 text-3xl font-light md:text-4xl">
+              <SectionHeading className="mt-3">
                 Function, beautifully built.
-              </h2>
+              </SectionHeading>
               <p className="mt-3 max-w-xl text-muted">
                 Compact commercial and site units — quiet rooms, gate houses and
                 custom shells that don&rsquo;t look like afterthoughts.

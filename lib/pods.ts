@@ -23,7 +23,22 @@ export type Pod = {
   priceFrom?: string; // e.g. "₹20L" — omit to hide price
   priceNote?: string;
   addons?: { label: string; price: string }[];
+  /**
+   * Official spec-sheet areas, in sq ft. THE single source of truth for area
+   * figures — the detail page's at-a-glance strip and the /pods comparison
+   * table both render from here, so the two can never drift apart.
+   * Cross-check: reraCarpet always equals room + bathroom.
+   */
+  areas?: {
+    footprint: number;
+    builtUp: number;
+    liviable: number;
+    reraCarpet: number;
+    room: number;
+    bathroom: number;
+  };
   areaStats?: { label: string; value: string }[];
+  /** Non-area details only (deck, glass, lifespan…) — areas live in `areas`. */
   specs: { label: string; value: string }[];
   sleeps?: string;
   included: string[];
@@ -47,7 +62,7 @@ export const pods: Pod[] = [
     overview:
       "Our flagship — the Lux version of our pods, with every bell and whistle over the premium build. A spacious living area and bedroom open onto a generous covered sit-out, wrapped in top-of-the-line materials and finished with the kind of details you'd expect from a boutique hotel suite.",
     image: "/images/gatsby/ext-05.jpg",
-    glance: ["650 sq ft built", "Sleeps 2+", "Skylit roof + big deck"],
+    glance: ["1,760 sq ft built-up", "Sleeps 2+", "Skylit roof + big deck"],
     gallery: [
       "/images/gatsby/ext-08.jpg",
       "/images/gatsby/ext-03.jpg",
@@ -66,11 +81,9 @@ export const pods: Pod[] = [
     ],
     priceFrom: "₹35L",
     priceNote: "excl. GST",
+    areas: { footprint: 4500, builtUp: 1760, liviable: 1700, reraCarpet: 670, room: 540, bathroom: 130 },
     specs: [
-      { label: "Room", value: "300 sq ft (15 × 20 ft)" },
-      { label: "Bathroom", value: "150 sq ft (15 × 10 ft)" },
-      { label: "Covered sit-out", value: "200 sq ft (10 × 20 ft)" },
-      { label: "Total built", value: "650 sq ft" },
+      { label: "Covered sit-out", value: "200 sq ft" },
       { label: "Lifespan", value: "30+ years" },
     ],
     sleeps: "2+ guests",
@@ -93,12 +106,12 @@ export const pods: Pod[] = [
     roi: "Commands the top nightly rates in the range — the headline unit for a premium rental.",
     faqs: [
       { q: "What makes the Gatsby the flagship?", a: "It carries every premium feature — Bluetooth audio, a projector, slim sliding glass, insect blinds and the best materials — in the largest single-room layout we offer." },
-      { q: "How much space do I need?", a: "The pod is 650 sq ft built-up; we'll confirm placement and access with a free site survey." },
+      { q: "How much space do I need?", a: "Allow roughly 4,500 sq ft of footprint for the Gatsby; the pod itself is 1,760 sq ft built-up. We'll confirm placement and access with a free site survey." },
       { q: "Can it earn as a rental?", a: "Yes — its luxury spec lets it command premium nightly rates on Airbnb, StayVista and Booking.com." },
     ],
     seoTitle: "Gatsby — Luxury Prefab Cabin (Flagship)",
     seoDescription:
-      "The Gatsby is Boho Pods' flagship — a fully-loaded 650 sq ft luxury prefab cabin with Bluetooth audio, projector, skylit roofline and a covered deck. From ₹35L.",
+      "The Gatsby is Boho Pods' flagship — a fully-loaded 1,760 sq ft built-up luxury prefab cabin with Bluetooth audio, projector, skylit roofline and a covered deck. From ₹35L.",
   },
   {
     slug: "nomad",
@@ -109,7 +122,7 @@ export const pods: Pod[] = [
     overview:
       "The new standard for work-from-anywhere. A secluded micro-retreat for the modern wanderer and remote professional — tuck it into a garden, perch it by a pool, or open it to a mountain view. Proof that true luxury doesn't need a big footprint, just intelligent design.",
     image: "/images/renders/boho-125.jpg",
-    glance: ["580 sq ft built", "Sleeps 1–2", "12 mm curved glass"],
+    glance: ["415 sq ft built-up", "Sleeps 1–2", "12 mm curved glass"],
     gallery: [
       "/images/renders/boho-125.jpg",
       "/images/renders/boho-000.jpg",
@@ -120,15 +133,8 @@ export const pods: Pod[] = [
       "/images/renders/boho-128.jpg",
     ],
     priceFrom: "₹20L",
-    areaStats: [
-      { label: "Ground coverage", value: "630 sq ft" },
-      { label: "Built-up area", value: "580 sq ft" },
-      { label: "Usable carpet", value: "390 sq ft" },
-      { label: "Carpet area", value: "388 sq ft" },
-    ],
+    areas: { footprint: 1200, builtUp: 415, liviable: 398, reraCarpet: 230, room: 150, bathroom: 80 },
     specs: [
-      { label: "Study & Rest", value: "15 × 10 ft" },
-      { label: "Toilet", value: "10 × 8 ft" },
       { label: "Deck", value: "4 ft wide + ramp" },
       { label: "Glass", value: "12 mm curved polyplast" },
     ],
@@ -167,7 +173,7 @@ export const pods: Pod[] = [
     overview:
       "Built on a high-quality mild-steel framework with industrial-grade materials that last over 30 years — a no-frills cabin with minimal automation, purpose-built for extreme-weather locations. Spacious volume and wide openings give you panoramic views inside a secure, weather-tight shell.",
     image: "/images/renders/boho-149.jpg",
-    glance: ["270 sq ft room", "Sleeps 2 (grows)", "Extreme-weather build"],
+    glance: ["625 sq ft built-up", "Sleeps 2 (grows)", "Extreme-weather build"],
     gallery: [
       "/images/renders/boho-149.jpg",
       "/images/renders/boho-021.jpg",
@@ -178,11 +184,9 @@ export const pods: Pod[] = [
     ],
     priceFrom: "₹25L",
     addons: [{ label: "Additional bedroom", price: "₹7.99L" }],
+    areas: { footprint: 1900, builtUp: 625, liviable: 580, reraCarpet: 425, room: 275, bathroom: 150 },
     specs: [
-      { label: "Room", value: "270 sq ft (15 × 20 ft)" },
-      { label: "Bathroom", value: "150 sq ft (15 × 10 ft)" },
-      { label: "Deck", value: "80 sq ft (15 × 7 ft)" },
-      { label: "Installation area", value: "1,000 sq ft" },
+      { label: "Deck", value: "80 sq ft" },
     ],
     sleeps: "2 guests (expandable)",
     included: [
@@ -218,7 +222,7 @@ export const pods: Pod[] = [
     overview:
       "Built over the robust quad pod, the Gazepod adds a large attached gazebo and an expansive deck — blurring the line between indoor comfort and the great outdoors. For hosts and homeowners who want the view to be the living room.",
     image: "/images/renders/boho-031.jpg",
-    glance: ["280 sq ft room", "Sleeps 2 (grows)", "325 sq ft deck + gazebo"],
+    glance: ["875 sq ft built-up", "Sleeps 2 (grows)", "325 sq ft deck + gazebo"],
     gallery: [
       "/images/renders/boho-031.jpg",
       "/images/renders/boho-013.jpg",
@@ -229,11 +233,9 @@ export const pods: Pod[] = [
     ],
     priceFrom: "₹28L",
     addons: [{ label: "Additional bedroom", price: "₹7.99L" }],
+    areas: { footprint: 2500, builtUp: 875, liviable: 825, reraCarpet: 425, room: 275, bathroom: 150 },
     specs: [
-      { label: "Room", value: "280 sq ft (15 × 20 ft)" },
-      { label: "Bathroom", value: "150 sq ft (15 × 10 ft)" },
-      { label: "Deck", value: "325 sq ft (10 × 20 ft)" },
-      { label: "Installation area", value: "1,500 sq ft" },
+      { label: "Deck", value: "325 sq ft + gazebo" },
     ],
     sleeps: "2 guests (expandable)",
     included: [
@@ -353,4 +355,28 @@ export const homesTeaser = {
 
 export function getPod(slug: string): Pod | undefined {
   return pods.find((p) => p.slug === slug);
+}
+
+/** Spec-sheet area rows, in the order they should be presented. */
+export const AREA_FIELDS = [
+  { key: "footprint", label: "Footprint" },
+  { key: "builtUp", label: "Built-up" },
+  { key: "liviable", label: "Liviable" },
+  { key: "reraCarpet", label: "RERA carpet" },
+  { key: "room", label: "Room" },
+  { key: "bathroom", label: "Bathroom" },
+] as const;
+
+/** "4500" → "4,500 sq ft" — one formatting rule for every surface. */
+export function sqft(n: number): string {
+  return `${n.toLocaleString("en-IN")} sq ft`;
+}
+
+/** Area rows for a pod, ready to render. Empty when the pod has no sheet data. */
+export function areaRows(pod: Pod): { label: string; value: string }[] {
+  if (!pod.areas) return [];
+  return AREA_FIELDS.map((f) => ({
+    label: f.label,
+    value: sqft(pod.areas![f.key]),
+  }));
 }

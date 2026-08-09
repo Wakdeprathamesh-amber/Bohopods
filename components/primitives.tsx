@@ -98,7 +98,6 @@ export function Eyebrow({
         className,
       )}
     >
-      <span className="size-1.5 shrink-0 rotate-45 bg-bronze" aria-hidden="true" />
       {children}
     </span>
   );

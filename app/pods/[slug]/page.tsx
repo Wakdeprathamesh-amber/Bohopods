@@ -6,12 +6,12 @@ import { ArrowLeft, Check, MessageCircle, Phone, Plus } from "lucide-react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
-import { Container, Section, Eyebrow, CTA } from "@/components/primitives";
+import { Container, Section, Eyebrow, SectionHeading, CTA } from "@/components/primitives";
 import { Reveal } from "@/components/Reveal";
 import { Topo } from "@/components/decor/Topo";
 import { PodCard } from "@/components/PodCard";
 import { PodGallery } from "@/components/PodGallery";
-import { getPod, pods } from "@/lib/pods";
+import { getPod, pods, areaRows } from "@/lib/pods";
 import { siteConfig, waLink, waMsg } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -53,6 +53,18 @@ export default async function PodPage({
   ].slice(0, 3);
   const lakhs = pod.priceFrom ? parseFloat(pod.priceFrom.replace(/[^0-9.]/g, "")) : null;
   const priceINR = lakhs ? Math.round(lakhs * 100000) : null;
+
+  // Spec-sheet areas split in two: the four big figures become the circles,
+  // room/bathroom join the at-a-glance strip alongside the pod's own details.
+  const areas = areaRows(pod);
+  const headlineAreas = areas.slice(0, 4);
+  const glanceItems = [
+    ...areas.slice(4),
+    ...pod.specs,
+    ...(pod.sleeps ? [{ label: "Capacity", value: pod.sleeps }] : []),
+  ];
+  // Pad the 4-column grid so the last row never shows bare background.
+  const glanceFillers = (4 - (glanceItems.length % 4)) % 4;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -154,12 +166,14 @@ export default async function PodPage({
             </Reveal>
             <Reveal delay={0.12}>
               <div className="mt-6 flex flex-wrap items-center gap-2.5">
-                {pod.specs.slice(0, 3).map((s) => (
+                {/* `glance` is the headline summary — deliberately different
+                    from the full at-a-glance strip further down. */}
+                {pod.glance.map((g) => (
                   <span
-                    key={s.label}
+                    key={g}
                     className="rounded-full border border-sand bg-cream px-3 py-1 text-xs text-ink"
                   >
-                    {s.label}: {s.value}
+                    {g}
                   </span>
                 ))}
                 {pod.priceFrom && (
@@ -191,15 +205,18 @@ export default async function PodPage({
           </Section>
         )}
 
-        {/* ── Area stat circles (if available) ── */}
-        {pod.areaStats && (
+        {/* ── Headline areas — the spec sheet's four big numbers ── */}
+        {headlineAreas.length > 0 && (
           <Section className="relative overflow-hidden bg-cream">
             <Topo className="pointer-events-none absolute inset-0 h-full w-full text-olive/10" />
             <Container className="relative">
-              <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
-                {pod.areaStats.map((a) => (
-                  <Reveal key={a.label}>
-                    <div className="mx-auto flex aspect-square max-w-[180px] flex-col items-center justify-center rounded-full border border-sand bg-paper text-center">
+              <Reveal>
+                <Eyebrow>The numbers</Eyebrow>
+              </Reveal>
+              <div className="mt-8 grid grid-cols-2 gap-6 lg:grid-cols-4">
+                {headlineAreas.map((a, i) => (
+                  <Reveal key={a.label} delay={i * 0.06}>
+                    <div className="mx-auto flex aspect-square max-w-[180px] flex-col items-center justify-center rounded-full border border-sand bg-paper text-center transition-transform duration-500 hover:scale-[1.04]">
                       <div className="font-display text-3xl font-light text-forest">
                         {a.value.replace(" sq ft", "")}
                       </div>
@@ -215,13 +232,13 @@ export default async function PodPage({
         )}
 
         {/* ── Spec strip ── */}
-        <Section className={pod.areaStats ? "pt-0" : ""}>
+        <Section>
           <Container>
             <Reveal>
               <Eyebrow>At a glance</Eyebrow>
             </Reveal>
             <div className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-sand bg-sand sm:grid-cols-2 lg:grid-cols-4">
-              {pod.specs.map((s) => (
+              {glanceItems.map((s) => (
                 <div key={s.label} className="bg-paper p-5">
                   <div className="text-xs uppercase tracking-widest text-muted">
                     {s.label}
@@ -231,16 +248,11 @@ export default async function PodPage({
                   </div>
                 </div>
               ))}
-              {pod.sleeps && (
-                <div className="bg-paper p-5">
-                  <div className="text-xs uppercase tracking-widest text-muted">
-                    Capacity
-                  </div>
-                  <div className="mt-1 font-display text-lg text-forest">
-                    {pod.sleeps}
-                  </div>
-                </div>
-              )}
+              {/* Blank cells finish the last row — without them the container's
+                  sand background shows through as empty tan blocks. */}
+              {Array.from({ length: glanceFillers }).map((_, i) => (
+                <div key={`filler-${i}`} className="hidden bg-paper sm:block" />
+              ))}
             </div>
           </Container>
         </Section>
@@ -363,7 +375,9 @@ export default async function PodPage({
           <Container>
             <Reveal>
               <Eyebrow>Explore the range</Eyebrow>
-              <h2 className="mt-3 text-3xl font-light">Other pods you might love</h2>
+              <SectionHeading className="mt-3">
+                Other pods you might love
+              </SectionHeading>
             </Reveal>
             <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((p) => (
