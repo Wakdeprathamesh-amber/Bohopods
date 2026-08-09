@@ -3,6 +3,7 @@
 import Image from "next/image";
 import type { MotionValue } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { cldVideoUrl } from "@/lib/cloudinary";
 
 const SLIDES = [
   {
@@ -94,6 +95,13 @@ export function GatsbyHeroSlideshow({
     return () => clearInterval(t);
   }, [videoMode]);
 
+  const posterSrc = cldVideoUrl("/videos/hero/hero-poster.jpg", { poster: true });
+  const scrubSrc = cldVideoUrl("/videos/hero/hero-scrub.mp4", { scrub: true });
+  // Local webm stays as a progressive-enhancement fallback; Cloudinary's
+  // vc_auto URL already picks the best format when the cloud is configured.
+  const loopMp4 = cldVideoUrl("/videos/hero/hero.mp4");
+  const loopWebm = "/videos/hero/hero.webm";
+
   return (
     <div className="absolute inset-0 overflow-hidden bg-forest-deep">
       {/* The hero film (preload after first paint; fades in over the slideshow) */}
@@ -105,7 +113,7 @@ export function GatsbyHeroSlideshow({
         playsInline
         // Seeking only feels instant once the file is buffered.
         preload={scrubbing ? "auto" : "metadata"}
-        poster="/videos/hero/hero-poster.jpg"
+        poster={posterSrc}
         className="absolute inset-0 size-full object-cover transition-opacity duration-1000 will-change-[opacity]"
         style={{ opacity: videoMode ? 1 : 0 }}
         aria-hidden={videoMode ? undefined : true}
@@ -114,11 +122,14 @@ export function GatsbyHeroSlideshow({
         key={scrubbing ? "scrub" : "loop"}
       >
         {scrubbing ? (
-          <source src="/videos/hero/hero-scrub.mp4" type="video/mp4" />
+          <source src={scrubSrc} type="video/mp4" />
         ) : (
           <>
-            <source src="/videos/hero/hero.webm" type="video/webm" />
-            <source src="/videos/hero/hero.mp4" type="video/mp4" />
+            {/* Prefer CDN mp4 when Cloudinary is wired; local webm only helps offline. */}
+            {loopMp4.startsWith("http") ? null : (
+              <source src={loopWebm} type="video/webm" />
+            )}
+            <source src={loopMp4} type="video/mp4" />
           </>
         )}
       </video>

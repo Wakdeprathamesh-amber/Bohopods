@@ -36,15 +36,22 @@ export function Hero() {
     offset: ["start start", "end start"],
   });
 
-  /* Scrubbing wants a *lightly* over-damped spring: enough to smooth the wheel
-     into continuous motion, but tight enough that the frame on screen is the
-     frame you scrolled to. Heavier settings trail by most of a second, which
-     reads as lag rather than weight. */
+  /* Decorative transforms ride a spring; the playhead deliberately does not. */
   const progress = useSpring(scrollYProgress, {
     stiffness: scrubbing ? 90 : 60,
     damping: scrubbing ? 22 : 26,
     mass: scrubbing ? 0.5 : 0.7,
     restDelta: 0.0005,
+  });
+
+  /* The film follows raw scroll, not the spring. Lenis has already smoothed the
+     scroll itself, so a second smoothing pass only adds tail — the playhead
+     keeps travelling after the wheel stops, which reads as the video "playing
+     on its own", and it arrives late at the end of the pin.
+     Mapped to finish at 90% so the film is always complete before the hero
+     unpins and the next section takes over. */
+  const scrubProgress = useTransform(scrollYProgress, [0, 0.9], [0, 1], {
+    clamp: true,
   });
 
   /* Two rhythms. Scrubbing gets a long runway, so the intro beats have to
@@ -122,7 +129,7 @@ export function Hero() {
             style={animated ? { scale: mediaScale, y: mediaY } : undefined}
           >
             <GatsbyHeroSlideshow
-              scrub={animated ? progress : undefined}
+              scrub={animated ? scrubProgress : undefined}
               scrubbing={animated && scrubbing}
             />
           </motion.div>
