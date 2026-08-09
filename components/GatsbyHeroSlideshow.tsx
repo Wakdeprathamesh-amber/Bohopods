@@ -32,28 +32,19 @@ const SLIDES = [
  * encoded all-intra (every frame a keyframe) so seeking lands instantly; the
  * regular file only carries 7 keyframes and would stutter badly.
  */
-export function GatsbyHeroSlideshow({ scrub }: { scrub?: MotionValue<number> }) {
+export function GatsbyHeroSlideshow({
+  scrub,
+  scrubbing = false,
+}: {
+  scrub?: MotionValue<number>;
+  /** Decided by the hero, which also sizes the scroll runway to match. */
+  scrubbing?: boolean;
+}) {
   const [active, setActive] = useState(0);
   const [videoMode, setVideoMode] = useState(false);
-  // null until measured on the client, so SSR doesn't guess wrong.
-  const [scrubbing, setScrubbing] = useState<boolean | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  /* Scrubbing is desktop-only: it needs the heavier all-intra file and a
-     pointer-driven scroll, and mobile browsers throttle rapid seeking. */
   useEffect(() => {
-    const decide = () => {
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const narrow = window.matchMedia("(max-width: 860px)").matches;
-      setScrubbing(!!scrub && !reduce && !narrow);
-    };
-    decide();
-    window.addEventListener("resize", decide);
-    return () => window.removeEventListener("resize", decide);
-  }, [scrub]);
-
-  useEffect(() => {
-    if (scrubbing === null) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     // Swap the film in only once it can play through (slideshow stays the fallback).
@@ -106,33 +97,31 @@ export function GatsbyHeroSlideshow({ scrub }: { scrub?: MotionValue<number> }) 
   return (
     <div className="absolute inset-0 overflow-hidden bg-forest-deep">
       {/* The hero film (preload after first paint; fades in over the slideshow) */}
-      {scrubbing !== null && (
-        <video
-          ref={videoRef}
-          // Scroll owns the playhead when scrubbing — no autoplay, no loop.
-          {...(scrubbing ? {} : { autoPlay: true, loop: true })}
-          muted
-          playsInline
-          // Seeking only feels instant once the file is buffered.
-          preload={scrubbing ? "auto" : "metadata"}
-          poster="/videos/hero/hero-poster.jpg"
-          className="absolute inset-0 size-full object-cover transition-opacity duration-1000 will-change-[opacity]"
-          style={{ opacity: videoMode ? 1 : 0 }}
-          aria-hidden={videoMode ? undefined : true}
-          // Remount on mode change so the browser picks up the other source
-          // instead of keeping the one it already committed to.
-          key={scrubbing ? "scrub" : "loop"}
-        >
-          {scrubbing ? (
-            <source src="/videos/hero/hero-scrub.mp4" type="video/mp4" />
-          ) : (
-            <>
-              <source src="/videos/hero/hero.webm" type="video/webm" />
-              <source src="/videos/hero/hero.mp4" type="video/mp4" />
-            </>
-          )}
-        </video>
-      )}
+      <video
+        ref={videoRef}
+        // Scroll owns the playhead when scrubbing — no autoplay, no loop.
+        {...(scrubbing ? {} : { autoPlay: true, loop: true })}
+        muted
+        playsInline
+        // Seeking only feels instant once the file is buffered.
+        preload={scrubbing ? "auto" : "metadata"}
+        poster="/videos/hero/hero-poster.jpg"
+        className="absolute inset-0 size-full object-cover transition-opacity duration-1000 will-change-[opacity]"
+        style={{ opacity: videoMode ? 1 : 0 }}
+        aria-hidden={videoMode ? undefined : true}
+        // Remount on mode change so the browser picks up the other source
+        // instead of keeping the one it already committed to.
+        key={scrubbing ? "scrub" : "loop"}
+      >
+        {scrubbing ? (
+          <source src="/videos/hero/hero-scrub.mp4" type="video/mp4" />
+        ) : (
+          <>
+            <source src="/videos/hero/hero.webm" type="video/webm" />
+            <source src="/videos/hero/hero.mp4" type="video/mp4" />
+          </>
+        )}
+      </video>
 
       {!videoMode &&
         SLIDES.map((s, i) => (

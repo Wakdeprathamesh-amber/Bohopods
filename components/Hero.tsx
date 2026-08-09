@@ -8,7 +8,7 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container, CTA } from "./primitives";
 import { GatsbyHeroSlideshow } from "./GatsbyHeroSlideshow";
 import { waLink, waMsg } from "@/lib/site";
@@ -17,42 +17,73 @@ export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
 
+  /* Scrubbing is desktop-only (matches the md: runway below and the child's
+     own guard). Starts false so SSR and the first paint agree. */
+  const [scrubbing, setScrubbing] = useState(false);
+  useEffect(() => {
+    const decide = () =>
+      setScrubbing(
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+          !window.matchMedia("(max-width: 767px)").matches,
+      );
+    decide();
+    window.addEventListener("resize", decide);
+    return () => window.removeEventListener("resize", decide);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  // Soft spring — follows Lenis without jitter. Slightly looser than a
-  // critically-damped spring so the media trails the scroll a touch, which is
-  // what reads as "weight" rather than the image being glued to the wheel.
+  /* Scrubbing wants a *lightly* over-damped spring: enough to smooth the wheel
+     into continuous motion, but tight enough that the frame on screen is the
+     frame you scrolled to. Heavier settings trail by most of a second, which
+     reads as lag rather than weight. */
   const progress = useSpring(scrollYProgress, {
-    stiffness: 60,
-    damping: 26,
-    mass: 0.7,
+    stiffness: scrubbing ? 90 : 60,
+    damping: scrubbing ? 22 : 26,
+    mass: scrubbing ? 0.5 : 0.7,
     restDelta: 0.0005,
   });
 
-  const mediaScale = useTransform(progress, [0, 1], [1, 1.22]);
-  const mediaY = useTransform(progress, [0, 1], ["0%", "14%"]);
+  /* Two rhythms. Scrubbing gets a long runway, so the intro beats have to
+     resolve in the first tenth of it; without it, the old proportions hold. */
+  const K = scrubbing
+    ? { text: 0.11, cueMid: 0.03, cueEnd: 0.07, recede: 0.9, scrimEnd: 0.92 }
+    : { text: 0.55, cueMid: 0.12, cueEnd: 0.28, recede: 0.55, scrimEnd: 0.75 };
+
+  /* The film's own camera move supplies the motion when scrubbing — stacking a
+     zoom on top of it is what makes these effects feel synthetic. */
+  const mediaScale = useTransform(progress, [0, 1], scrubbing ? [1, 1.03] : [1, 1.22]);
+  const mediaY = useTransform(progress, [0, 1], scrubbing ? ["0%", "2%"] : ["0%", "14%"]);
 
   // Tail of the pin: the whole frame eases back into a rounded card, so the
   // hero hands off to the next section instead of just scrolling away.
-  const frameScale = useTransform(progress, [0.55, 1], [1, 0.93]);
-  const frameRadius = useTransform(progress, [0.55, 1], ["0px", "28px"]);
+  const frameScale = useTransform(progress, [K.recede, 1], [1, 0.93]);
+  const frameRadius = useTransform(progress, [K.recede, 1], ["0px", "28px"]);
 
-  const textY = useTransform(progress, [0, 0.55], [0, -72]);
-  const textOpacity = useTransform(progress, [0, 0.22, 0.55], [1, 0.85, 0]);
+  const textY = useTransform(progress, [0, K.text], [0, -72]);
+  const textOpacity = useTransform(
+    progress,
+    [0, K.text * 0.4, K.text],
+    [1, 0.85, 0],
+  );
   const textBlur = useTransform(
     progress,
-    [0, 0.35, 0.6],
+    [0, K.text * 0.64, K.text * 1.09],
     ["blur(0px)", "blur(2px)", "blur(10px)"],
   );
-  const textScale = useTransform(progress, [0, 0.55], [1, 0.96]);
+  const textScale = useTransform(progress, [0, K.text], [1, 0.96]);
 
   // Kept light: the frame recede now carries the handoff, so the veil only has
   // to sink the media behind the incoming section — not black it out.
-  const scrim = useTransform(progress, [0, 0.75], [0, 0.3]);
-  const cueOpacity = useTransform(progress, [0, 0.12, 0.28], [1, 0.4, 0]);
+  const scrim = useTransform(progress, [0, K.scrimEnd], [0, 0.3]);
+  const cueOpacity = useTransform(
+    progress,
+    [0, K.cueMid, K.cueEnd],
+    [1, 0.4, 0],
+  );
 
   const animated = reduce !== true;
 
@@ -62,7 +93,10 @@ export function Hero() {
       id="top"
       className={
         animated
-          ? "relative h-[160vh] min-h-[900px] md:h-[190vh] md:min-h-[1100px]"
+          // Desktop runway is long on purpose: the 16.4s film is mapped across
+          // it, so ~420vh gives roughly 230px of scroll per second of footage —
+          // a walking pace. Phones don't scrub, so they keep the short runway.
+          ? "relative h-[160vh] min-h-[900px] md:h-[420vh] md:min-h-[2600px]"
           : "relative h-dvh min-h-[640px]"
       }
     >
@@ -87,7 +121,10 @@ export function Hero() {
             className="absolute inset-0 will-change-transform"
             style={animated ? { scale: mediaScale, y: mediaY } : undefined}
           >
-            <GatsbyHeroSlideshow scrub={animated ? progress : undefined} />
+            <GatsbyHeroSlideshow
+              scrub={animated ? progress : undefined}
+              scrubbing={animated && scrubbing}
+            />
           </motion.div>
 
           {/* Base legibility scrims */}
