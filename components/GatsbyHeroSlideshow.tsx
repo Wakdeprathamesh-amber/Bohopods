@@ -66,13 +66,21 @@ export function GatsbyHeroSlideshow({
     if (!ready) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // Swap the film in only once it can play through (slideshow stays the fallback).
+    /* Reveal the film as soon as a frame exists, not once the whole thing can
+       play through. The scrub cut is ~55MB off the CDN, so `canplaythrough`
+       can take many seconds or never fire on a slow line — which used to leave
+       the slideshow up and the scroll effect dead. `loadeddata` means frame
+       one is decoded, which is all the hero needs to show something real. */
     const v = videoRef.current;
     if (v) {
       const onReady = () => setVideoMode(true);
+      v.addEventListener("loadeddata", onReady, { once: true });
       v.addEventListener("canplaythrough", onReady, { once: true });
       v.load();
-      return () => v.removeEventListener("canplaythrough", onReady);
+      return () => {
+        v.removeEventListener("loadeddata", onReady);
+        v.removeEventListener("canplaythrough", onReady);
+      };
     }
   }, [scrubbing, ready]);
 
@@ -80,7 +88,7 @@ export function GatsbyHeroSlideshow({
      a fast flick can't queue up more seeks than the decoder can service. */
   useEffect(() => {
     const v = videoRef.current;
-    if (!scrubbing || !scrub || !v || !videoMode) return;
+    if (!scrubbing || !scrub || !v) return;
 
     v.pause();
     let raf = 0;
@@ -89,6 +97,7 @@ export function GatsbyHeroSlideshow({
     const apply = () => {
       raf = 0;
       const d = v.duration;
+      // Metadata may not have arrived yet; the loadedmetadata handler re-runs.
       if (!d || Number.isNaN(d)) return;
       const t = Math.min(d - 0.05, Math.max(0, target * d));
       if (Math.abs(v.currentTime - t) > 0.01) v.currentTime = t;
@@ -99,12 +108,21 @@ export function GatsbyHeroSlideshow({
       if (!raf) raf = requestAnimationFrame(apply);
     });
 
+    /* Bound to metadata rather than to the reveal: duration is all a seek
+       needs, and waiting for the file to be playable-through left the
+       playhead pinned at 0 on the larger CDN cut. */
+    const onMeta = () => apply();
+    v.addEventListener("loadedmetadata", onMeta);
+    v.addEventListener("durationchange", onMeta);
     apply();
+
     return () => {
       unsub();
+      v.removeEventListener("loadedmetadata", onMeta);
+      v.removeEventListener("durationchange", onMeta);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [scrub, scrubbing, videoMode]);
+  }, [scrub, scrubbing]);
 
   useEffect(() => {
     if (videoMode) return;
@@ -120,9 +138,9 @@ export function GatsbyHeroSlideshow({
   /* Phones get a 720p cut of the loop. The 1080p pair is 14MB+, which is a lot
      to spend on a muted background on a handset — and at ~400px wide the
      difference isn't visible. Desktop (reduced-motion) keeps the 1080p file. */
-  const loopMp4 = narrow
-    ? "/videos/hero/hero-mobile.mp4"
-    : cldVideoUrl("/videos/hero/hero.mp4");
+  const loopMp4 = cldVideoUrl(
+    narrow ? "/videos/hero/hero-mobile.mp4" : "/videos/hero/hero.mp4",
+  );
   const loopWebm = "/videos/hero/hero.webm";
 
   return (

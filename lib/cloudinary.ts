@@ -8,8 +8,12 @@ const CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 const MIGRATED = /^\/(images|brochure)\//;
 const MIGRATED_VIDEO = /^\/videos\//;
 
-/** Flip to true once the hero films exist on Cloudinary (see cldVideoUrl). */
-const VIDEO_ON_CDN = false;
+/**
+ * The hero films are on Cloudinary. The uploads looked like they failed —
+ * the client connection dropped mid-transfer — but they had already landed
+ * server-side, so `bohopods/videos/hero/{hero,hero-scrub}` both resolve.
+ */
+const VIDEO_ON_CDN = true;
 
 export function cldUrl(
   src: string,
