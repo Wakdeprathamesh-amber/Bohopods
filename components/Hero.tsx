@@ -87,7 +87,7 @@ export function Hero() {
             className="absolute inset-0 will-change-transform"
             style={animated ? { scale: mediaScale, y: mediaY } : undefined}
           >
-            <GatsbyHeroSlideshow />
+            <GatsbyHeroSlideshow scrub={animated ? progress : undefined} />
           </motion.div>
 
           {/* Base legibility scrims */}

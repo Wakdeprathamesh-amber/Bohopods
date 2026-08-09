@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { MotionValue } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 const SLIDES = [
@@ -22,15 +23,37 @@ const SLIDES = [
 ];
 
 /**
- * Cinematic Gatsby hero — "FIRST LIGHT" 20.5s looping film with the Ken-Burns
- * slideshow as the reduced-motion / slow-connection fallback.
+ * Cinematic Gatsby hero film, with the Ken-Burns slideshow as the
+ * reduced-motion / slow-connection fallback.
+ *
+ * When a `scrub` progress value is supplied and the viewport is wide enough,
+ * the film is paused and its playhead is driven by scroll instead of looping —
+ * scrolling plays the walkthrough. That mode loads `hero-scrub.mp4`, which is
+ * encoded all-intra (every frame a keyframe) so seeking lands instantly; the
+ * regular file only carries 7 keyframes and would stutter badly.
  */
-export function GatsbyHeroSlideshow() {
+export function GatsbyHeroSlideshow({ scrub }: { scrub?: MotionValue<number> }) {
   const [active, setActive] = useState(0);
   const [videoMode, setVideoMode] = useState(false);
+  // null until measured on the client, so SSR doesn't guess wrong.
+  const [scrubbing, setScrubbing] = useState<boolean | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  /* Scrubbing is desktop-only: it needs the heavier all-intra file and a
+     pointer-driven scroll, and mobile browsers throttle rapid seeking. */
   useEffect(() => {
+    const decide = () => {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const narrow = window.matchMedia("(max-width: 860px)").matches;
+      setScrubbing(!!scrub && !reduce && !narrow);
+    };
+    decide();
+    window.addEventListener("resize", decide);
+    return () => window.removeEventListener("resize", decide);
+  }, [scrub]);
+
+  useEffect(() => {
+    if (scrubbing === null) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     // Swap the film in only once it can play through (slideshow stays the fallback).
@@ -41,7 +64,37 @@ export function GatsbyHeroSlideshow() {
       v.load();
       return () => v.removeEventListener("canplaythrough", onReady);
     }
-  }, []);
+  }, [scrubbing]);
+
+  /* Drive the playhead from scroll. Seeks are coalesced into one per frame so
+     a fast flick can't queue up more seeks than the decoder can service. */
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!scrubbing || !scrub || !v || !videoMode) return;
+
+    v.pause();
+    let raf = 0;
+    let target = 0;
+
+    const apply = () => {
+      raf = 0;
+      const d = v.duration;
+      if (!d || Number.isNaN(d)) return;
+      const t = Math.min(d - 0.05, Math.max(0, target * d));
+      if (Math.abs(v.currentTime - t) > 0.01) v.currentTime = t;
+    };
+
+    const unsub = scrub.on("change", (p) => {
+      target = p;
+      if (!raf) raf = requestAnimationFrame(apply);
+    });
+
+    apply();
+    return () => {
+      unsub();
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [scrub, scrubbing, videoMode]);
 
   useEffect(() => {
     if (videoMode) return;
@@ -53,21 +106,33 @@ export function GatsbyHeroSlideshow() {
   return (
     <div className="absolute inset-0 overflow-hidden bg-forest-deep">
       {/* The hero film (preload after first paint; fades in over the slideshow) */}
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        poster="/videos/hero/hero-poster.jpg"
-        className="absolute inset-0 size-full object-cover transition-opacity duration-1000 will-change-[opacity]"
-        style={{ opacity: videoMode ? 1 : 0 }}
-        aria-hidden={videoMode ? undefined : true}
-      >
-        <source src="/videos/hero/hero.webm" type="video/webm" />
-        <source src="/videos/hero/hero.mp4" type="video/mp4" />
-      </video>
+      {scrubbing !== null && (
+        <video
+          ref={videoRef}
+          // Scroll owns the playhead when scrubbing — no autoplay, no loop.
+          {...(scrubbing ? {} : { autoPlay: true, loop: true })}
+          muted
+          playsInline
+          // Seeking only feels instant once the file is buffered.
+          preload={scrubbing ? "auto" : "metadata"}
+          poster="/videos/hero/hero-poster.jpg"
+          className="absolute inset-0 size-full object-cover transition-opacity duration-1000 will-change-[opacity]"
+          style={{ opacity: videoMode ? 1 : 0 }}
+          aria-hidden={videoMode ? undefined : true}
+          // Remount on mode change so the browser picks up the other source
+          // instead of keeping the one it already committed to.
+          key={scrubbing ? "scrub" : "loop"}
+        >
+          {scrubbing ? (
+            <source src="/videos/hero/hero-scrub.mp4" type="video/mp4" />
+          ) : (
+            <>
+              <source src="/videos/hero/hero.webm" type="video/webm" />
+              <source src="/videos/hero/hero.mp4" type="video/mp4" />
+            </>
+          )}
+        </video>
+      )}
 
       {!videoMode &&
         SLIDES.map((s, i) => (
