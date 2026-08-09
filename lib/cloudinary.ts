@@ -8,6 +8,9 @@ const CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 const MIGRATED = /^\/(images|brochure)\//;
 const MIGRATED_VIDEO = /^\/videos\//;
 
+/** Flip to true once the hero films exist on Cloudinary (see cldVideoUrl). */
+const VIDEO_ON_CDN = false;
+
 export function cldUrl(
   src: string,
   opts?: { w?: number; q?: number | "auto" },
@@ -41,9 +44,19 @@ export function cldVideoUrl(
   const path = src.replace(/^\//, "").replace(/\.[a-zA-Z0-9]+$/, "");
   const publicId = `bohopods/${path}`;
 
+  // The poster uploaded fine, so it comes off the CDN.
   if (opts?.poster) {
     return `https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_auto:best,w_1920,c_limit/${publicId}`;
   }
 
+  /**
+   * The films still serve from /public. Repeated attempts to push the 41MB
+   * scrub and 16MB loop to Cloudinary died mid-transfer (EPIPE, then a stalled
+   * 425s request), and pointing at a public_id that doesn't exist would leave
+   * the hero with no video at all. Vercel serves /public from its own CDN, so
+   * this is a fine place to sit until the uploads land.
+   * To switch over: upload both, then return the commented URL below.
+   */
+  if (!VIDEO_ON_CDN) return src;
   return `https://res.cloudinary.com/${CLOUD}/video/upload/${publicId}.mp4`;
 }
