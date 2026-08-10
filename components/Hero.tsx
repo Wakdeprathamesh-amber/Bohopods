@@ -57,8 +57,8 @@ export function Hero() {
   /* Two rhythms. Scrubbing gets a long runway, so the intro beats have to
      resolve in the first tenth of it; without it, the old proportions hold. */
   const K = scrubbing
-    ? { text: 0.11, cueMid: 0.03, cueEnd: 0.07, recede: 0.9, scrimEnd: 0.92 }
-    : { text: 0.55, cueMid: 0.12, cueEnd: 0.28, recede: 0.55, scrimEnd: 0.75 };
+    ? { text: 0.11, cueMid: 0.03, cueEnd: 0.07, recede: 0.9 }
+    : { text: 0.55, cueMid: 0.12, cueEnd: 0.28, recede: 0.55 };
 
   /* The film's own camera move supplies the motion when scrubbing — stacking a
      zoom on top of it is what makes these effects feel synthetic. */
@@ -85,7 +85,8 @@ export function Hero() {
 
   // Kept light: the frame recede now carries the handoff, so the veil only has
   // to sink the media behind the incoming section — not black it out.
-  const scrim = useTransform(progress, [0, K.scrimEnd], [0, 0.3]);
+  /* No scroll-deepening veil any more: it darkened the film as you scrolled,
+     and the frame recede already carries the handoff into the next section. */
   const cueOpacity = useTransform(
     progress,
     [0, K.cueMid, K.cueEnd],
@@ -134,18 +135,14 @@ export function Hero() {
             />
           </motion.div>
 
-          {/* Base legibility scrims */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-forest-deep/60 via-forest-deep/20 to-forest-deep/85" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/55 via-black/10 to-transparent" />
+          {/* Legibility shading only where white type actually sits — a short
+              band under the nav and a pool behind the headline on the left.
+              The film's own frame stays unwashed, especially the view on the
+              right, which is the whole point of the shot. */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-forest-deep/45 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-forest-deep/45 via-forest-deep/8 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-forest-deep/35 to-transparent" />
 
-          {/* Scroll-deepening veil — eases the handoff into the next section */}
-          {animated && (
-            <motion.div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 bg-forest-deep"
-              style={{ opacity: scrim }}
-            />
-          )}
         </motion.div>
 
         {/* Content */}
