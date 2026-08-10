@@ -45,6 +45,10 @@ export function GatsbyHeroSlideshow({
   const [videoMode, setVideoMode] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  const posterSrc = cldVideoUrl("/videos/hero/hero-poster.jpg", { poster: true });
+  const scrubSrc = cldVideoUrl("/videos/hero/hero-scrub.mp4", { scrub: true });
+  const loopWebm = "/videos/hero/hero.webm";
+
   /**
    * Nothing is mounted until the client has decided which film to use. The
    * scrub flag arrives one render late, so mounting the <video> immediately
@@ -61,6 +65,13 @@ export function GatsbyHeroSlideshow({
     m.addEventListener("change", sync);
     return () => m.removeEventListener("change", sync);
   }, []);
+
+  /* Phones get a 720p cut of the loop. The 1080p file is far more than a muted
+     background needs on a handset, and at ~400px wide the difference isn't
+     visible. Desktop (reduced-motion) keeps the 1080p file. */
+  const loopMp4 = cldVideoUrl(
+    narrow ? "/videos/hero/hero-mobile.mp4" : "/videos/hero/hero.mp4",
+  );
 
   useEffect(() => {
     if (!ready) return;
@@ -84,23 +95,71 @@ export function GatsbyHeroSlideshow({
     }
   }, [scrubbing, ready]);
 
+  /**
+   * Pull the scrub cut fully into memory before scroll ever touches it.
+   *
+   * Streaming it doesn't work: browsers deliberately stop buffering far ahead
+   * of the playhead, so "wait until it's buffered" can wait forever, and any
+   * seek past the buffered edge costs a fresh range request — which is what
+   * showed up as lag, hangs, and the playhead stopping on a stale frame. Held
+   * as a blob, every seek is a memory read, so scrubbing is instant and
+   * behaves identically on every load. The slideshow covers the download.
+   */
+  const [filmReady, setFilmReady] = useState(false);
+  useEffect(() => {
+    if (!ready || !scrubbing) return;
+    let objectUrl: string | null = null;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch(scrubSrc, { cache: "force-cache" });
+        if (!res.ok) throw new Error(String(res.status));
+        const blob = await res.blob();
+        if (cancelled) return;
+        objectUrl = URL.createObjectURL(blob);
+        const v = videoRef.current;
+        if (!v) return;
+        v.loop = false;
+        v.src = objectUrl;
+        v.load();
+        setFilmReady(true);
+        setVideoMode(true);
+      } catch {
+        // Network refused the whole file — fall back to streaming the source,
+        // which still scrubs, just less smoothly on the first pass.
+        if (!cancelled) setFilmReady(true);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [ready, scrubbing, scrubSrc]);
+
   /* Drive the playhead from scroll. Seeks are coalesced into one per frame so
      a fast flick can't queue up more seeks than the decoder can service. */
   useEffect(() => {
     const v = videoRef.current;
-    if (!scrubbing || !scrub || !v) return;
+    if (!scrubbing || !scrub || !v || !filmReady) return;
 
+    v.loop = false;
     v.pause();
+
     let raf = 0;
     let target = 0;
 
     const apply = () => {
       raf = 0;
       const d = v.duration;
-      // Metadata may not have arrived yet; the loadedmetadata handler re-runs.
       if (!d || Number.isNaN(d)) return;
-      const t = Math.min(d - 0.05, Math.max(0, target * d));
-      if (Math.abs(v.currentTime - t) > 0.01) v.currentTime = t;
+      // A seek is already in flight — let it land. Queuing on top of it is what
+      // makes the decoder fall behind and the picture appear to freeze. The
+      // `seeked` listener below re-runs this with the newest target.
+      if (v.seeking) return;
+      const t = Math.min(d - 0.04, Math.max(0, target * d));
+      if (Math.abs(v.currentTime - t) > 0.015) v.currentTime = t;
     };
 
     const unsub = scrub.on("change", (p) => {
@@ -108,21 +167,37 @@ export function GatsbyHeroSlideshow({
       if (!raf) raf = requestAnimationFrame(apply);
     });
 
+    /* Re-run whenever more data lands (so scrub arms itself), and again each
+       time a seek settles — scroll may have moved on while that seek was in
+       flight, and without this the playhead stops at a stale frame. */
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(apply);
+    };
+    v.addEventListener("progress", kick);
+    v.addEventListener("canplaythrough", kick);
+    v.addEventListener("seeked", kick);
+
     /* Bound to metadata rather than to the reveal: duration is all a seek
        needs, and waiting for the file to be playable-through left the
        playhead pinned at 0 on the larger CDN cut. */
-    const onMeta = () => apply();
-    v.addEventListener("loadedmetadata", onMeta);
-    v.addEventListener("durationchange", onMeta);
+    v.addEventListener("loadedmetadata", kick);
+    v.addEventListener("durationchange", kick);
     apply();
 
     return () => {
       unsub();
-      v.removeEventListener("loadedmetadata", onMeta);
-      v.removeEventListener("durationchange", onMeta);
+      for (const e of [
+        "progress",
+        "canplaythrough",
+        "seeked",
+        "loadedmetadata",
+        "durationchange",
+      ]) {
+        v.removeEventListener(e, kick);
+      }
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [scrub, scrubbing]);
+  }, [scrub, scrubbing, filmReady]);
 
   useEffect(() => {
     if (videoMode) return;
@@ -131,17 +206,6 @@ export function GatsbyHeroSlideshow({
     return () => clearInterval(t);
   }, [videoMode]);
 
-  const posterSrc = cldVideoUrl("/videos/hero/hero-poster.jpg", { poster: true });
-  const scrubSrc = cldVideoUrl("/videos/hero/hero-scrub.mp4", { scrub: true });
-  // Local webm stays as a progressive-enhancement fallback; Cloudinary's
-  // vc_auto URL already picks the best format when the cloud is configured.
-  /* Phones get a 720p cut of the loop. The 1080p pair is 14MB+, which is a lot
-     to spend on a muted background on a handset — and at ~400px wide the
-     difference isn't visible. Desktop (reduced-motion) keeps the 1080p file. */
-  const loopMp4 = cldVideoUrl(
-    narrow ? "/videos/hero/hero-mobile.mp4" : "/videos/hero/hero.mp4",
-  );
-  const loopWebm = "/videos/hero/hero.webm";
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-forest-deep">
@@ -150,8 +214,12 @@ export function GatsbyHeroSlideshow({
       {ready && (
       <video
         ref={videoRef}
-        // Scroll owns the playhead when scrubbing — no autoplay, no loop.
-        {...(scrubbing ? {} : { autoPlay: true, loop: true })}
+        /* Autoplay + loop in both modes. When scrubbing, the film plays
+           normally until it's buffered end to end, then scroll takes the
+           playhead over (see the scrub effect, which clears `loop`). That way
+           a cold load shows real motion instead of a frozen first frame. */
+        autoPlay
+        loop
         muted
         playsInline
         // Seeking only feels instant once the file is buffered.
