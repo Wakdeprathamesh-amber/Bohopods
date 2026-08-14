@@ -53,7 +53,7 @@ export function PodCatalogueCard({ pod }: { pod: Pod }) {
           })}
         </ul>
 
-        <span className="mt-5 inline-flex items-center gap-1 font-display text-sm text-forest transition-colors group-hover:text-olive">
+        <span className="mt-4 inline-flex items-center gap-1 py-2 font-display text-sm text-forest transition-colors group-hover:text-olive">
           View details <ArrowUpRight className="size-4" />
         </span>
       </div>

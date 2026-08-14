@@ -39,7 +39,7 @@ export function Gallery() {
           <Reveal delay={0.12}>
             <Link
               href={`/pods/${pod.slug}`}
-              className="inline-flex items-center gap-1.5 font-display text-sm text-forest transition-colors hover:text-olive"
+              className="-my-1 inline-flex items-center gap-1.5 py-2 font-display text-sm text-forest transition-colors hover:text-olive"
             >
               View {pod.name} details <ArrowUpRight className="size-4" />
             </Link>

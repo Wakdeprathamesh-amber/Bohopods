@@ -128,7 +128,7 @@ export default async function PodPage({
           <Container className="relative z-10 pb-12 pt-28">
             <Link
               href="/pods"
-              className="inline-flex items-center gap-1.5 text-sm text-paper/80 transition-colors hover:text-paper"
+              className="-my-1 inline-flex items-center gap-1.5 py-2 text-sm text-paper/80 transition-colors hover:text-paper"
             >
               <ArrowLeft className="size-4" /> All pods
             </Link>

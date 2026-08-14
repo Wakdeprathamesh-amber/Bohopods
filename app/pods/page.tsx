@@ -269,7 +269,7 @@ export default function PodsPage() {
                               <Link
                                 key={slug}
                                 href={`/pods/${slug}`}
-                                className="rounded-full border border-sand bg-cream/60 px-3 py-1 font-display text-xs text-forest transition-colors hover:border-olive hover:text-olive-deep"
+                                className="rounded-full border border-sand bg-cream/60 px-3.5 py-2 font-display text-xs text-forest transition-colors hover:border-olive hover:text-olive-deep"
                               >
                                 {p.name} →
                               </Link>
@@ -278,7 +278,7 @@ export default function PodsPage() {
                         ) : (
                           <Link
                             href="#homes"
-                            className="rounded-full border border-sand bg-cream/60 px-3 py-1 font-display text-xs text-forest transition-colors hover:border-olive hover:text-olive-deep"
+                            className="rounded-full border border-sand bg-cream/60 px-3.5 py-2 font-display text-xs text-forest transition-colors hover:border-olive hover:text-olive-deep"
                           >
                             2 &amp; 3-BHK →
                           </Link>
@@ -325,7 +325,7 @@ export default function PodsPage() {
                 </div>
                 <Link
                   href="#compare"
-                  className="inline-flex items-center gap-1.5 font-display text-sm text-forest transition-colors hover:text-olive"
+                  className="-my-1 inline-flex items-center gap-1.5 py-2 font-display text-sm text-forest transition-colors hover:text-olive"
                 >
                   Compare them side by side <ArrowRight className="size-4" />
                 </Link>
@@ -507,7 +507,7 @@ export default function PodsPage() {
                     href={waLink(waMsg.pod("Looie"))}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-5 inline-flex items-center gap-1 font-display text-sm text-forest transition-colors hover:text-olive"
+                    className="mt-4 inline-flex items-center gap-1 py-2 font-display text-sm text-forest transition-colors hover:text-olive"
                   >
                     Get notified <ArrowUpRight className="size-4" />
                   </a>
@@ -528,7 +528,7 @@ export default function PodsPage() {
                     href={waLink(waMsg.general)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative mt-5 inline-flex items-center gap-1 font-display text-sm text-paper transition-colors hover:text-sage"
+                    className="relative mt-4 inline-flex items-center gap-1 py-2 font-display text-sm text-paper transition-colors hover:text-sage"
                   >
                     Talk to us <ArrowUpRight className="size-4" />
                   </a>
@@ -553,7 +553,7 @@ export default function PodsPage() {
               </div>
               <Link
                 href="/#process"
-                className="inline-flex items-center gap-1.5 font-display text-sm text-forest transition-colors hover:text-olive"
+                className="-my-1 inline-flex items-center gap-1.5 py-2 font-display text-sm text-forest transition-colors hover:text-olive"
               >
                 See how it works <ArrowRight className="size-4" />
               </Link>

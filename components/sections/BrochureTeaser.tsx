@@ -26,7 +26,7 @@ export function BrochureTeaser() {
             <a
               href="/brochure/bohopods-brochure.pdf"
               download="Bohopods-Brochure.pdf"
-              className="font-display text-sm text-paper/60 underline decoration-paper/30 underline-offset-4 transition-colors hover:text-paper"
+              className="inline-block py-2 font-display text-sm text-paper/60 underline decoration-paper/30 underline-offset-4 transition-colors hover:text-paper"
             >
               or download the PDF (4 MB)
             </a>

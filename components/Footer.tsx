@@ -35,7 +35,7 @@ export function Footer() {
             href={siteConfig.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-2 text-sm transition-colors hover:text-paper"
+            className="mt-4 inline-flex items-center gap-2 py-1.5 text-sm transition-colors hover:text-paper"
           >
             <InstagramGlyph className="size-4" /> {siteConfig.instagramHandle}
           </a>
@@ -69,7 +69,7 @@ export function Footer() {
                 href={waLink(waMsg.general)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 transition-colors hover:text-paper"
+                className="inline-flex items-center gap-2 py-1.5 transition-colors hover:text-paper"
               >
                 <MessageCircle className="size-4" /> WhatsApp us
               </a>
@@ -77,7 +77,7 @@ export function Footer() {
             <li>
               <a
                 href={`tel:+${siteConfig.phone}`}
-                className="inline-flex items-center gap-2 transition-colors hover:text-paper"
+                className="inline-flex items-center gap-2 py-1.5 transition-colors hover:text-paper"
               >
                 <Phone className="size-4" /> {siteConfig.phoneDisplay}
               </a>
@@ -85,7 +85,7 @@ export function Footer() {
             <li>
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="inline-flex items-center gap-2 transition-colors hover:text-paper"
+                className="inline-flex items-center gap-2 py-1.5 transition-colors hover:text-paper"
               >
                 <Mail className="size-4" /> {siteConfig.email}
               </a>
